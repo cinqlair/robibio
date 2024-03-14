@@ -3,14 +3,15 @@ function [handle] = plot_initial_configuration(x, motors)
     hold on; grid on;
     
     %% Draw body
-    plot (0,0,'k.', 'MarkerSize', 30);
-    plot (0,-380,'k.', 'MarkerSize', 30);
-    plot (0,-738.5,'k.', 'MarkerSize', 30);
-    plot (121,-792.5,'k.', 'MarkerSize', 30);
-    line ([0,0],[0,500], 'Color', 'k','LineWidth', 5);
-    line ([0,0],[0,-380], 'Color', 'k','LineWidth', 5);
-    line ([0,0],[-380,-738.5], 'Color', 'k','LineWidth', 5);
-    line ([0,121],[-738.5, -792.5], 'Color', 'k','LineWidth', 5);
+    plot (0,0,'k.', 'MarkerSize', 30); % Hip
+    plot (0,-380,'k.', 'MarkerSize', 30); % Knee
+    plot (0,-738.5,'k.', 'MarkerSize', 30); % Ankle
+    plot (121,-792.5,'k.', 'MarkerSize', 30); % Toes
+    
+    line ([0,0],[0,500], 'Color', 'k','LineWidth', 5); % Trunk
+    line ([0,0],[0,-380], 'Color', 'k','LineWidth', 5); % Thigh
+    line ([0,0],[-380,-738.5], 'Color', 'k','LineWidth', 5); % Tibia
+    line ([0,121],[-738.5, -792.5], 'Color', 'k','LineWidth', 5); % Foot
 
     
     %% Motors

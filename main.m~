@@ -11,9 +11,12 @@ global best_solution;
 % dataGrimmer.{hip|knee|ankle}.{angleDeg|torque|theta|angle}
 % N is the number of samples
 
-%motionNames = ["Climbing_ascend"];
-%motionNames = ["Climbing_descend"];
-%motionNames = ["Cycling"];
+% Climbing_ascend: [1×1 struct]
+%     Climbing_descend: [1×1 struct]
+%              Cycling: [1×1 struct]
+%        Lifting_Squat: [1×1 struct]
+%        Lifting_Stoop: [1×1 struct]
+
 %motionNames = ["Lifting_Squat"];
 %motionNames = ["Lifting_Stoop"];
 %motionNames = ["Recovery"];
@@ -24,7 +27,7 @@ global best_solution;
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
 %motionNames = [ "Walking_11"];
-motionNames = [ "Walking_16"];
+%motionNames = [ "Walking_16"];
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
 
 % plot (dataGrimmer.hip.theta);
@@ -85,7 +88,7 @@ for i=start:step:stop
     
     
     %% Process Ankle
-    thetaAnkle = dataGrimmer.ankle.theta(i);
+    thetaAnkle = dataGrimmer.ankle.theta(i)
     matrices.rotation.ankle= [cos(thetaAnkle) -sin(thetaAnkle) 0 0 ; sin(thetaAnkle), cos(thetaAnkle), 0, 0; 0,0,1,0; 0, 0, 0, 1];
     
     matrices.transformation.hip_to_toes = matrices.transformation.hip_to_ankle * matrices.rotation.ankle * matrices.translation.ankle_to_toes;
