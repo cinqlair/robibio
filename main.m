@@ -92,8 +92,8 @@ for i=start:step:stop
     
     
     %% Initialize Jacobian
-    jacobian.left = zeros(3,5);
-    jacobian.right = zeros(3,5);
+    jacobian = zeros(3,5);
+    
     
     %% Hip
     % Compute motor unit vector
@@ -105,7 +105,7 @@ for i=start:step:stop
     
     % Compute Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(3,5) = J(3);
+    jacobian(3,5) = J(3);
     
     
     %% Knee
@@ -119,7 +119,7 @@ for i=start:step:stop
     
     % Compute Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(2,3) = J(3);
+    jacobian(2,3) = J(3);
     
     
     
@@ -133,7 +133,7 @@ for i=start:step:stop
         
     % Compute Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(1,1) = J(3);
+    jacobian(1,1) = J(3);
     
 
     
@@ -147,14 +147,14 @@ for i=start:step:stop
     
     % Compute upper Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(3,4) = J(3);
+    jacobian(3,4) = J(3);
     
     % Compute the lower lever arm in meters (/1000 => mm to m);
     vector_lever = (motors.trajectories.hip_knee.shang(:) - trajectories.knee(:)  )/ 1000;
     
     % Compute lower Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(2,4) = J(3);
+    jacobian(2,4) = J(3);
     
     
     
@@ -169,27 +169,18 @@ for i=start:step:stop
     
     % Compute upper Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(2,2) = J(3);
+    jacobian(2,2) = J(3);
         
     % Compute the lower lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.knee_ankle.foot(:) - trajectories.ankle(:)  )/ 1000
+    vector_lever = (motors.trajectories.knee_ankle.foot(:) - trajectories.ankle(:)  )/ 1000;
     
     % Compute lower Jacobian
     J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian.left(1,2) = J(3);
+    jacobian(1,2) = J(3);
+    jacobian
     
     
-    
-%     
-%     figure(2);
-%     plot (0,0,'o');
-%     hold on;
-%     plot (vector_lever(1), vector_lever(2), '.');
-%     axis ([-0.2 0.2 -0.2 0.2]);
-%     axis square equal;
-%     figure(1);    
-    
-    
+  
     
     
     
