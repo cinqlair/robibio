@@ -23,8 +23,8 @@ global best_solution;
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-%motionNames = [ "Walking_11"];
-motionNames = [ "Walking_16"];
+motionNames = [ "Walking_11"];
+%motionNames = [ "Walking_16"];
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
 
 % plot (dataGrimmer.hip.theta);
@@ -67,7 +67,10 @@ x= [ -80 , 400, -80, 300, 0 ...     % Hip { Xh Yh Xl Yl Offset }
     -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
+
+
 %% Motion loop
+index = 1;
 for i=start:step:stop
     
     %% Prepare joint angles
@@ -80,12 +83,68 @@ for i=start:step:stop
     matrices.transformation = computeTransformationMatrices(matrices);
     trajectories = computeJointTrajectories(matrices);
     
-    %% Compute motors coordinates and trajectories
+    %% Compute motors attachment coordinates, trajectories and length
     motors.parameters = appendX2motors(x);
     motors.trajectories = computeMotorTrajectories(matrices, motors);
+    motors.lengths = computeMotorLengths(motors);
     
-    % Distance between attachment points
-    motors.length.hip = norm (motors.trajectories.hip.thigh(:) - motors.trajectories.hip.trunk(:));
+    
+    
+    
+    %% Initialize Jacobian
+    jacobian.left = zeros(3,5);
+    jacobian.right = zeros(3,5);
+    
+    %% Hip
+    % Compute motor unit vector
+    vector_motor = motors.trajectories.hip.thigh(:) - motors.trajectories.hip.trunk(:);
+    vector_motor_unit = vector_motor/norm(vector_motor);
+    
+    % Compute the lever arm in meters (/1000 => mm to m);
+    vector_lever = (motors.trajectories.hip.thigh(:) - trajectories.hip(:)) / 1000;
+    
+    % Compute Jacobian
+    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
+    jacobian.left(3,5) = J(3);
+    
+    
+    %% Knee
+    % Compute motor unit vector
+    vector_motor = motors.trajectories.knee.shang(:) - motors.trajectories.knee.thigh(:);
+    vector_motor_unit = vector_motor/norm(vector_motor);
+
+    
+    % Compute the lever arm in meters (/1000 => mm to m);
+    vector_lever = (motors.trajectories.knee.shang(:) - trajectories.knee(:)  )/ 1000;
+    
+    % Compute Jacobian
+    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
+    jacobian.left(2,3) = J(3);
+    
+    
+    %% Ankle
+    % Compute motor unit vector
+    vector_motor = motors.trajectories.ankle.foot(:) - motors.trajectories.ankle.shang(:);
+    vector_motor_unit = vector_motor/norm(vector_motor);
+    
+    % Compute the lever arm in meters (/1000 => mm to m);
+    vector_lever = (motors.trajectories.ankle.foot(:) - trajectories.ankle(:)  )/ 1000
+    
+    
+    % Compute Jacobian
+    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
+    jacobian.left(1,1) = J(3);
+    
+        
+%     figure(2);
+%     plot (0,0,'o');
+%     hold on;
+%     plot (vector_lever(1), vector_lever(2), '.');
+%     axis ([-0.2 0.2 -0.2 0.2]);
+%     figure(1);    
+    
+    
+    
     
     
     update_figure_robot(gHandle, trajectories, motors);
@@ -93,14 +152,23 @@ for i=start:step:stop
     drawnow();
     
     
-    data.lenght.hip(index) = mot
-    
+    data.lengths.hip(index) = motors.lengths.hip;
+    data.lengths.knee(index) = motors.lengths.knee;
+    data.lengths.ankle(index) = motors.lengths.ankle;
+    data.lengths.hip_knee(index) = motors.lengths.hip_knee;
+    data.lengths.knee_ankle(index) = motors.lengths.knee_ankle;
+    index = index+1;
 end
 
-
-
-
-
+figure;
+hold on;
+plot (data.lengths.hip, 'Color', [1,0,0]);
+plot (data.lengths.knee, 'Color', [0,1,0]);
+plot (data.lengths.ankle, 'Color', [0,0,1]);
+plot (data.lengths.hip_knee, 'Color', [0,1,1]);
+plot (data.lengths.knee_ankle, 'Color', [1,0.5,0]);
+legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
+grid on;
 id = 0;
 
 
