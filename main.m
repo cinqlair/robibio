@@ -23,8 +23,8 @@ global best_solution;
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-%motionNames = [ "Walking_11"];
-motionNames = [ "Walking_16"];
+motionNames = [ "Walking_11"];
+%motionNames = [ "Walking_16"];
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
 
 % plot (dataGrimmer.hip.theta);
@@ -32,7 +32,7 @@ motionNames = [ "Walking_16"];
 % plot (dataGrimmer.hip.angleDeg);
 
 
-start = 1
+start = 1;
 step = 1;
 stop = N;
 
@@ -43,63 +43,11 @@ dimensions.thigh = [0, -380, 0, 1];
 dimensions.shang = [0, -358, 0, 1];
 dimensions.foot = [121, -54, 0, 1];
 
-
-matrices.translation.hip_to_neck = [1 0 0 dimensions.trunk(1) ; 0 1 0 dimensions.trunk(2); 0 0 1 dimensions.trunk(3); 0 0 0 1];
-matrices.translation.hip_to_knee = [1 0 0 dimensions.thigh(1) ; 0 1 0 dimensions.thigh(2); 0 0 1 dimensions.thigh(3); 0 0 0 1];
-matrices.translation.knee_to_ankle = [1 0 0 dimensions.shang(1) ; 0 1 0 dimensions.shang(2); 0 0 1 dimensions.shang(3); 0 0 0 1];
-matrices.translation.ankle_to_toes = [1 0 0 dimensions.foot(1) ; 0 1 0 dimensions.foot(2); 0 0 1 dimensions.foot(3); 0 0 0 1];
+%% Prepare translation matrices
+matrices.translation = computeTranslationMatrices(dimensions);
 
 %% Prepare the figure
-handle = init_figure_robot()
-
-
-
-index = 1;
-for i=start:step:stop
-    
-    
-    trajectory.neck = dimensions.trunk;
-    set(handle.joint.neck, 'XData', trajectory.neck(1),   'YData', trajectory.neck(2));
-    set(handle.segment.trunk,   'XData', [0, trajectory.neck(1)],   'YData', [0, trajectory.neck(2)]);
-    
-    %% Process Hip
-    thetaHip = dataGrimmer.hip.theta(i);
-    matrices.rotation.hip = [cos(thetaHip) -sin(thetaHip) 0 0 ; sin(thetaHip), cos(thetaHip), 0, 0; 0,0,1,0; 0, 0, 0, 1];
-    
-    matrices.transformation.hip_to_knee = matrices.rotation.hip * matrices.translation.hip_to_knee;
-    trajectory.knee = matrices.transformation.hip_to_knee * [0;0;0;1];
-    
-    set(handle.joint.knee, 'XData', trajectory.knee(1),   'YData', trajectory.knee(2));
-    set(handle.segment.thigh,   'XData', [0, trajectory.knee(1)],   'YData', [0, trajectory.knee(2)]);
-    
-    
-    %% Process Knee
-    thetaKnee = dataGrimmer.knee.theta(i);
-    matrices.rotation.knee= [cos(thetaKnee) -sin(thetaKnee) 0 0 ; sin(thetaKnee), cos(thetaKnee), 0, 0; 0,0,1,0; 0, 0, 0, 1];
-    
-    matrices.transformation.hip_to_ankle = matrices.transformation.hip_to_knee * matrices.rotation.knee * matrices.translation.knee_to_ankle;
-    trajectory.ankle = matrices.transformation.hip_to_ankle  * [0;0;0;1];
-    
-    set(handle.joint.ankle, 'XData', trajectory.ankle(1),   'YData', trajectory.ankle(2));
-    set(handle.segment.shang,   'XData', [trajectory.knee(1), trajectory.ankle(1)],   'YData', [trajectory.knee(2), trajectory.ankle(2)]);
-    
-    
-    %% Process Ankle
-    thetaAnkle = dataGrimmer.ankle.theta(i);
-    matrices.rotation.ankle= [cos(thetaAnkle) -sin(thetaAnkle) 0 0 ; sin(thetaAnkle), cos(thetaAnkle), 0, 0; 0,0,1,0; 0, 0, 0, 1];
-    
-    matrices.transformation.hip_to_toes = matrices.transformation.hip_to_ankle * matrices.rotation.ankle * matrices.translation.ankle_to_toes;
-    trajectory.toes = matrices.transformation.hip_to_toes * [0;0;0;1];
-    
-    set(handle.joint.toes, 'XData', trajectory.toes(1),   'YData', trajectory.toes(2));
-    set(handle.segment.foot,   'XData', [trajectory.ankle(1), trajectory.toes(1)],   'YData', [trajectory.ankle(2), trajectory.toes(2)]);
-    
-    drawnow();
-    
-    
-end
-
-
+gHandle = init_figure_robot();
 
 
 %% Enable/disable motors
@@ -108,6 +56,60 @@ motors.enable.knee = true;
 motors.enable.ankle = true;
 motors.enable.hip_knee = true;
 motors.enable.knee_ankle = true;
+
+
+
+%% Initial configuration
+x= [ -80 , 400, -80, 300, 0 ...     % Hip { Xh Yh Xl Yl Offset }
+    80,  200,  40,  300, 0 ...     % Knee { Xh Yh Xl Yl Offset }
+    60,  300,  -60,  20, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
+    -50,  100,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
+    -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
+
+
+%% Motion loop
+index = 1;
+for i=start:step:stop
+    
+    %% Prepare joint angles
+    thetaHip = dataGrimmer.hip.theta(i);
+    thetaKnee = dataGrimmer.knee.theta(i);
+    thetaAnkle = dataGrimmer.ankle.theta(i);
+    
+    %% Compute transformation matrices & joints trajectories
+    matrices.rotation = computeRotationMatrices(thetaHip, thetaKnee, thetaAnkle);
+    matrices.transformation = computeTransformationMatrices(matrices);
+    trajectories = computeJointTrajectories(matrices);
+    
+    %% Compute motors coordinates and trajectories
+    motors.parameters = appendX2motors(x);
+    motors.trajectories = computeMotorTrajectories(matrices, motors);
+    motors.lengths = computeMotorLengths(motors);
+
+    
+    
+    update_figure_robot(gHandle, trajectories, motors);
+    
+    drawnow();
+    
+    
+    data.lengths.hip(index) = motors.lengths.hip;
+    data.lengths.knee(index) = motors.lengths.knee;
+    data.lengths.ankle(index) = motors.lengths.ankle;
+    data.lengths.hip_knee(index) = motors.lengths.hip_knee;
+    data.lengths.knee_ankle(index) = motors.lengths.knee_ankle;
+    index = index+1;
+end
+
+figure;
+hold on;
+plot (data.lengths.hip, 'Color', [1,0,0]);
+plot (data.lengths.knee, 'Color', [0,1,0]);
+plot (data.lengths.ankle, 'Color', [0,0,1]);
+plot (data.lengths.hip_knee, 'Color', [0,1,1]);
+plot (data.lengths.knee_ankle, 'Color', [1,0.5,0]);
+legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
+grid on;
 id = 0;
 
 
@@ -128,12 +130,6 @@ ub =[   85      500     80      480     100 ...     % Hip { Xh Yh Xl Yl Offset }
 
 
 
-%% Initial configuration
-x= [ -80 , 400, -80, 300, 0 ...     % Hip { Xh Yh Xl Yl Offset }
-    80,  300,  80,  300, 0 ...     % Knee { Xh Yh Xl Yl Offset }
-    -80,  300,  -180,  20, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
-    -50,  100,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
-    -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
 
