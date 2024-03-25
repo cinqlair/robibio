@@ -33,7 +33,7 @@ motionNames = [ "Walking_11"];
 
 
 start = 1;
-step = 1;
+step = 4;
 stop = N;
 
 
@@ -77,7 +77,7 @@ for i=start:step:stop
     thetaHip = dataGrimmer.hip.theta(i);
     thetaKnee = dataGrimmer.knee.theta(i);
     thetaAnkle = dataGrimmer.ankle.theta(i);
-
+    
     
     %% Compute transformation matrices & joints trajectories
     matrices.rotation = computeRotationMatrices(thetaHip, thetaKnee, thetaAnkle);
@@ -94,9 +94,23 @@ for i=start:step:stop
     motors.leverVectors = computeLeverVectors(motors, trajectories);
     
     %% Compute Jacobian
-    jacobian = computeJacobian(motors)   
-  
-       
+    jacobian = computeJacobian(motors)
+    
+    
+    dataGrimmer.hip
+    %% Compute motor velocities
+    dqdt = [dataGrimmer.hip.dqdt(i); dataGrimmer.knee.dqdt(i) ; dataGrimmer.ankle.dqdt(i)];
+    motor_velocities = transpose(jacobian) * dqdt;
+    
+    motors.velocity.hip        = motor_velocities(5);
+    motors.velocity.knee       = motor_velocities(3);
+    motors.velocity.ankle      = motor_velocities(1);
+    motors.velocity.hip_knee   = motor_velocities(4);
+    motors.velocity.knee_ankle = motor_velocities(2);
+    
+    
+    
+    
     
     update_figure_robot(gHandle, trajectories, motors);
     
@@ -108,8 +122,28 @@ for i=start:step:stop
     data.lengths.ankle(index) = motors.lengths.ankle;
     data.lengths.hip_knee(index) = motors.lengths.hip_knee;
     data.lengths.knee_ankle(index) = motors.lengths.knee_ankle;
+    
+    data.velocities.hip(index) = motors.velocity.hip;
+    data.velocities.knee(index) = motors.velocity.knee;
+    data.velocities.ankle(index) = motors.velocity.ankle; 
+    data.velocities.hip_knee(index) = motors.velocity.hip_knee;
+    data.velocities.knee_ankle(index) = motors.velocity.knee_ankle;
+    
+    
     index = index+1;
 end
+figure;
+hold on;
+plot (data.velocities.hip, 'Color', [1,0,0]);
+plot (data.velocities.knee, 'Color', [0,1,0]);
+plot (data.velocities.ankle, 'Color', [0,0,1]);
+plot (data.velocities.hip_knee, 'Color', [0,1,1]);
+plot (data.velocities.knee_ankle, 'Color', [1,0.5,0]);
+legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
+title ('velocities');
+grid on;
+
+
 
 figure;
 hold on;
@@ -119,6 +153,7 @@ plot (data.lengths.ankle, 'Color', [0,0,1]);
 plot (data.lengths.hip_knee, 'Color', [0,1,1]);
 plot (data.lengths.knee_ankle, 'Color', [1,0.5,0]);
 legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
+title ('Motor length');
 grid on;
 id = 0;
 
