@@ -46,8 +46,6 @@ dimensions.foot = [121, -54, 0, 1];
 %% Prepare translation matrices
 matrices.translation = computeTranslationMatrices(dimensions);
 
-%% Prepare the figure
-gHandle = init_figure_robot();
 
 
 %% Enable/disable motors
@@ -67,6 +65,8 @@ x= [ -80 , 400, -80, 300, 0 ...     % Hip { Xh Yh Xl Yl Offset }
     -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
+%% Prepare the figure
+gHandle = init_figure_robot();
 
 
 %% Motion loop
@@ -77,6 +77,7 @@ for i=start:step:stop
     thetaHip = dataGrimmer.hip.theta(i);
     thetaKnee = dataGrimmer.knee.theta(i);
     thetaAnkle = dataGrimmer.ankle.theta(i);
+
     
     %% Compute transformation matrices & joints trajectories
     matrices.rotation = computeRotationMatrices(thetaHip, thetaKnee, thetaAnkle);
@@ -88,101 +89,14 @@ for i=start:step:stop
     motors.trajectories = computeMotorTrajectories(matrices, motors);
     motors.lengths = computeMotorLengths(motors);
     
+    %% Compute vectors
+    motors.unitVectors = computeMotorUnitVectors(motors);
+    motors.leverVectors = computeLeverVectors(motors, trajectories);
     
-    
-    
-    %% Initialize Jacobian
-    jacobian = zeros(3,5);
-    
-    
-    %% Hip
-    % Compute motor unit vector
-    vector_motor = motors.trajectories.hip.thigh(:) - motors.trajectories.hip.trunk(:);
-    vector_motor_unit = vector_motor/norm(vector_motor);
-    
-    % Compute the lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.hip.thigh(:) - trajectories.hip(:)) / 1000;
-    
-    % Compute Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(3,5) = J(3);
-    
-    
-    %% Knee
-    % Compute motor unit vector
-    vector_motor = motors.trajectories.knee.shang(:) - motors.trajectories.knee.thigh(:);
-    vector_motor_unit = vector_motor/norm(vector_motor);
-
-    
-    % Compute the lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.knee.shang(:) - trajectories.knee(:)  )/ 1000;
-    
-    % Compute Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(2,3) = J(3);
-    
-    
-    
-    %% Ankle
-    % Compute motor unit vector
-    vector_motor = motors.trajectories.ankle.foot(:) - motors.trajectories.ankle.shang(:);
-    vector_motor_unit = vector_motor/norm(vector_motor);
-    
-    % Compute the lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.ankle.foot(:) - trajectories.ankle(:)  )/ 1000;
-        
-    % Compute Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(1,1) = J(3);
-    
-
-    
-    %% Hip-Knee    
-    % Compute motor unit vector
-    vector_motor = motors.trajectories.hip_knee.shang(:) - motors.trajectories.hip_knee.trunk(:);
-    vector_motor_unit = vector_motor/norm(vector_motor);
-                        
-    % Compute the upper lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.hip_knee.trunk(:) - trajectories.hip(:) )/ 1000;
-    
-    % Compute upper Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(3,4) = J(3);
-    
-    % Compute the lower lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.hip_knee.shang(:) - trajectories.knee(:)  )/ 1000;
-    
-    % Compute lower Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(2,4) = J(3);
-    
-    
-    
-
-    %% Knee-Ankle
-    % Compute motor unit vector
-    vector_motor = motors.trajectories.knee_ankle.foot(:) - motors.trajectories.knee_ankle.thigh(:);
-    vector_motor_unit = vector_motor/norm(vector_motor);
-    
-    % Compute the upper lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.knee_ankle.thigh(:) - trajectories.knee(:) )/1000;
-    
-    % Compute upper Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(2,2) = J(3);
-        
-    % Compute the lower lever arm in meters (/1000 => mm to m);
-    vector_lever = (motors.trajectories.knee_ankle.foot(:) - trajectories.ankle(:)  )/ 1000;
-    
-    % Compute lower Jacobian
-    J = -cross (vector_motor_unit(1:3), vector_lever(1:3));
-    jacobian(1,2) = J(3);
-    jacobian
-    
-    
+    %% Compute Jacobian
+    jacobian = computeJacobian(motors)   
   
-    
-    
+       
     
     update_figure_robot(gHandle, trajectories, motors);
     
