@@ -8,12 +8,17 @@ grimmer = load (strcat(path,'dataset-martin-grimmer/data.mat'));
 data.hip.angleDeg   = [];
 data.hip.torque     = [];
 data.hip.dqdt       = [];
+data.hip.power      = [];
+
 data.knee.angleDeg  = [];
 data.knee.torque    = [];
 data.knee.dqdt      = [];
+data.knee.power     = [];
+
 data.ankle.angleDeg = [];
 data.ankle.torque   = [];
 data.ankle.dqdt     = [];
+data.ankle.power    = [];
 
 
 for i=1:size(motionNames, 1)
@@ -22,14 +27,17 @@ for i=1:size(motionNames, 1)
     data.hip.angleDeg   = [ data.hip.angleDeg ; motion.Hip_Angle ];
     data.hip.torque     = [ data.hip.torque; motion.Hip_Moment];
     data.hip.dqdt       = [ data.hip.dqdt; motion.Hip_Velocity];
+    data.hip.power      = [ data.hip.power; motion.Hip_Power];
     
     data.knee.angleDeg  = [ data.knee.angleDeg ; motion.Knee_Angle ];
     data.knee.torque    = [ data.knee.torque; motion.Knee_Moment];
     data.knee.dqdt      = [ data.knee.dqdt; motion.Knee_Velocity];
+    data.knee.power      = [ data.knee.power; motion.Knee_Power];
     
     data.ankle.angleDeg = [ data.ankle.angleDeg ; motion.Ankle_Angle ];
     data.ankle.torque   = [ data.ankle.torque; motion.Ankle_Moment];
     data.ankle.dqdt     = [ data.ankle.dqdt; motion.Ankle_Velocity];
+    data.ankle.power      = [ data.ankle.power; motion.Ankle_Power];
 end
 
 data.hip.theta   = -deg2rad(data.hip.angleDeg);
