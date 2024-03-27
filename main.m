@@ -52,14 +52,14 @@ matrices.translation = computeTranslationMatrices(dimensions);
 motors.enable.hip = true;
 motors.enable.knee = true;
 motors.enable.ankle = true;
-motors.enable.hip_knee = true;
-motors.enable.knee_ankle = true;
+motors.enable.hip_knee = false;
+motors.enable.knee_ankle = false;
 
 
 
 %% Initial configuration
 x= [ -80 , 400, -80, 300, 0 ...     % Hip { Xh Yh Xl Yl Offset }
-    80,  200,  40,  300, 0 ...     % Knee { Xh Yh Xl Yl Offset }
+    80,  200,  40,  380, 0 ...     % Knee { Xh Yh Xl Yl Offset }
     60,  300,  -60,  20, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
     -50,  100,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
     -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
@@ -107,85 +107,120 @@ for i=start:step:stop
     motors.velocity.ankle      = motor_velocities(1);
     motors.velocity.hip_knee   = motor_velocities(4);
     motors.velocity.knee_ankle = motor_velocities(2);
+    
+    
+    
+    
+    %% Left leg minimize power
+    options = optimset('Display','off');
+    
+    % Minimize power
+    C = diag(motor_velocities);
+    
+    % System to solve
+    Aeq = jacobian;
+    beq = [dataGrimmer.ankle.torque(i); dataGrimmer.knee.torque(i) ; dataGrimmer.hip.torque(i)];
+    
+    % Bounds (Motors maximum force)
+    ub = [ Inf; Inf; Inf; Inf; Inf ];
+    lb = -ub;
+    
+    % Solver https://fr.mathworks.com/help/optim/ug/lsqlin.html
+    [forces,resnorm,residualLeft,exitFlagLeft,output,lambda] = lsqlin(C, zeros(5,1), [], [], Aeq, beq, lb, ub, [], options);
+    
+    % Motion should be feasable
+    if (exitFlagLeft ~= 1)
+        print('Error with constrained linear least-squares problems solver');
+    end
+    
+    % Store forces
+    motors.forces = forces;
+    % Compute vector forces
+    if (motors.enable.hip) motors.forceVectors.hip = motors.unitVectors.hip*forces(5); end
+    if (motors.enable.knee) motors.forceVectors.knee = motors.unitVectors.knee*forces(3); end
+    if (motors.enable.ankle) motors.forceVectors.ankle = motors.unitVectors.ankle*forces(1); end
+    if (motors.enable.hip_knee) motors.forceVectors.hip_knee = motors.unitVectors.hip_knee*forces(4); end
+    if (motors.enable.knee_ankle) motors.forceVectors.knee_ankle = motors.unitVectors.knee_ankle*forces(2); end
        
     
     
+    data_motors_forces(index, :) = forces;
+    data_grimmer_torques(index, :) = [dataGrimmer.ankle.torque(i); dataGrimmer.knee.torque(i) ; dataGrimmer.hip.torque(i)];
     
     update_figure_robot(gHandle, trajectories, motors);
     
     drawnow();
+
+    data(index).motors = motors;
+    data(index).trajectories = trajectories;
     
-    
-    data.lengths.hip(index) = motors.lengths.hip;
-    data.lengths.knee(index) = motors.lengths.knee;
-    data.lengths.ankle(index) = motors.lengths.ankle;
-    data.lengths.hip_knee(index) = motors.lengths.hip_knee;
-    data.lengths.knee_ankle(index) = motors.lengths.knee_ankle;
-    
-    data.velocities.hip(index) = motors.velocity.hip;
-    data.velocities.knee(index) = motors.velocity.knee;
-    data.velocities.ankle(index) = motors.velocity.ankle; 
-    data.velocities.hip_knee(index) = motors.velocity.hip_knee;
-    data.velocities.knee_ankle(index) = motors.velocity.knee_ankle;
-    
+%     
+%     data.lengths.hip(index) = motors.lengths.hip;
+%     data.lengths.knee(index) = motors.lengths.knee;
+%     data.lengths.ankle(index) = motors.lengths.ankle;
+%     data.lengths.hip_knee(index) = motors.lengths.hip_knee;
+%     data.lengths.knee_ankle(index) = motors.lengths.knee_ankle;
+%     
+%     data.velocities.hip(index) = motors.velocity.hip;
+%     data.velocities.knee(index) = motors.velocity.knee;
+%     data.velocities.ankle(index) = motors.velocity.ankle; 
+%     data.velocities.hip_knee(index) = motors.velocity.hip_knee;
+%     data.velocities.knee_ankle(index) = motors.velocity.knee_ankle;
+%     
     
     index = index+1;
 end
 
-%% Check velocity on mono-articular motors
 figure;
 hold on;
-
-plot (diff(data.lengths.hip), 'Color', [1,0,0]);
-plot (data.velocities.hip, '.', 'Color', [1,0,0]);
-
-plot (diff(data.lengths.knee), 'Color', [0,1,0]);
-plot (data.velocities.knee, '.', 'Color', [0,1,0]);
-
-plot (diff(data.lengths.ankle), 'Color', [0,0,1]);
-plot (data.velocities.ankle, '.', 'Color', [0,0,1]);
-
-legend ('hip (diff)', 'hip (J)', 'knee (diff)', 'knee (J)', 'ankle (diff)', 'ankle (J)');
-title('Check velocity (mono-articular)');
-
-
-%% Check velocity on bi-articular motors
-figure;
-hold on;
-grid on;
-
-plot (diff(data.lengths.hip_knee), 'Color', [1,0,0]);
-plot (data.velocities.hip_knee, 'Color', [1,0,0]);
-
-plot (diff(data.lengths.knee_ankle), 'Color', [0,1,0]);
-plot (data.velocities.knee_ankle, 'Color', [0,1,0]);
-legend ('hip-knee (diff)', 'hip-knee (J)','knee-ankle (diff)','knee-ankle (J)');
-title('Check velocity (bi-articular)');
-
-
-figure;
-hold on;
-plot (data.velocities.hip, 'Color', [1,0,0]);
-plot (data.velocities.knee, 'Color', [0,1,0]);
-plot (data.velocities.ankle, 'Color', [0,0,1]);
-plot (data.velocities.hip_knee, 'Color', [0,1,1]);
-plot (data.velocities.knee_ankle, 'Color', [1,0.5,0]);
-legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
-title ('velocities');
+plot (data_motors_forces(:,5));
+plot (20*data_grimmer_torques(:,3));
+legend('Force', 'Torque');
+title ('Hip');
 grid on;
 
 
+figure;
+hold on;
+plot (data_motors_forces(:,3));
+plot (20*data_grimmer_torques(:,2));
+legend('Force', 'Torque');
+title ('Knee');
+grid on;
+
 
 figure;
 hold on;
-plot (data.lengths.hip, 'Color', [1,0,0]);
-plot (data.lengths.knee, 'Color', [0,1,0]);
-plot (data.lengths.ankle, 'Color', [0,0,1]);
-plot (data.lengths.hip_knee, 'Color', [0,1,1]);
-plot (data.lengths.knee_ankle, 'Color', [1,0.5,0]);
-legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
-title ('Motor length');
+plot (data_motors_forces(:,1));
+plot (20*data_grimmer_torques(:,1));
+legend('Force', 'Torque');
+title ('Ankle');
 grid on;
+
+% 
+% figure;
+% hold on;
+% plot (data.velocities.hip, 'Color', [1,0,0]);
+% plot (data.velocities.knee, 'Color', [0,1,0]);
+% plot (data.velocities.ankle, 'Color', [0,0,1]);
+% plot (data.velocities.hip_knee, 'Color', [0,1,1]);
+% plot (data.velocities.knee_ankle, 'Color', [1,0.5,0]);
+% legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
+% title ('velocities');
+% grid on;
+% 
+% 
+% 
+% figure;
+% hold on;
+% plot (data.lengths.hip, 'Color', [1,0,0]);
+% plot (data.lengths.knee, 'Color', [0,1,0]);
+% plot (data.lengths.ankle, 'Color', [0,0,1]);
+% plot (data.lengths.hip_knee, 'Color', [0,1,1]);
+% plot (data.lengths.knee_ankle, 'Color', [1,0.5,0]);
+% legend('Hip', 'Knee', 'Ankle', 'Hip-Knee', 'Knee-Ankle');
+% title ('Motor length');
+% grid on;
 id = 0;
 
 

@@ -41,6 +41,9 @@ if (motors.enable.hip)
     % Lever vector
     set(gHandle.motor.leverVectors.hip,  'XData', [trajectories.hip(1), trajectories.hip(1) + 1000*motors.leverVectors.hip(1)]);
     set(gHandle.motor.leverVectors.hip,  'YData', [trajectories.hip(2), trajectories.hip(2) + 1000*motors.leverVectors.hip(2)]);    
+    % Force vector
+    set(gHandle.motor.forceVectors.hip,  'XData', [motors.trajectories.hip.thigh(1), motors.trajectories.hip.thigh(1) + 10*motors.forceVectors.hip(1)]);
+    set(gHandle.motor.forceVectors.hip,  'YData', [motors.trajectories.hip.thigh(2), motors.trajectories.hip.thigh(2) + 10*motors.forceVectors.hip(2)]);
 end
 
 %% Knee
@@ -54,6 +57,9 @@ if (motors.enable.knee)
     % Lever vector
     set(gHandle.motor.leverVectors.knee,  'XData', [trajectories.knee(1), trajectories.knee(1) + 1000*motors.leverVectors.knee(1)]);
     set(gHandle.motor.leverVectors.knee,  'YData', [trajectories.knee(2), trajectories.knee(2) + 1000*motors.leverVectors.knee(2)]); 
+    % Force vector
+    set(gHandle.motor.forceVectors.knee,  'XData', [motors.trajectories.knee.shang(1), motors.trajectories.knee.shang(1) + 10*motors.forceVectors.knee(1)]);
+    set(gHandle.motor.forceVectors.knee,  'YData', [motors.trajectories.knee.shang(2), motors.trajectories.knee.shang(2) + 10*motors.forceVectors.knee(2)]);
 end
 
 %% Ankle
@@ -67,6 +73,9 @@ if (motors.enable.ankle)
     % Lever vector
     set(gHandle.motor.leverVectors.ankle,  'XData', [trajectories.ankle(1), trajectories.ankle(1) + 1000*motors.leverVectors.ankle(1)]);
     set(gHandle.motor.leverVectors.ankle,  'YData', [trajectories.ankle(2), trajectories.ankle(2) + 1000*motors.leverVectors.ankle(2)]); 
+    % Force vector
+    set(gHandle.motor.forceVectors.ankle,  'XData', [motors.trajectories.ankle.foot(1), motors.trajectories.ankle.foot(1) + 10*motors.forceVectors.ankle(1)]);
+    set(gHandle.motor.forceVectors.ankle,  'YData', [motors.trajectories.ankle.foot(2), motors.trajectories.ankle.foot(2) + 10*motors.forceVectors.ankle(2)]);    
 end
 
 %% Hip-Knee
