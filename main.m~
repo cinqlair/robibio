@@ -32,9 +32,9 @@ motionNames = [ "Walking_11"];
 % plot (dataGrimmer.hip.angleDeg);
 
 
-start = 1;
+start = 700;
 step = 1;
-stop = 1000;
+stop = 750;
 
 
 %% Robot segments dimensions
@@ -61,7 +61,7 @@ motors.enable.knee_ankle = true;
 x= [ -80 , 400, -80, 300, 0 ...     % Hip { Xh Yh Xl Yl Offset }
     80,  200,  40,  300, 0 ...     % Knee { Xh Yh Xl Yl Offset }
     60,  300,  -60,  20, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
-    -50,  100,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
+    50,  100,  50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
     -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
@@ -102,12 +102,13 @@ for i=start:step:stop
     dqdt = [dataGrimmer.ankle.dqdt(i); dataGrimmer.knee.dqdt(i) ; dataGrimmer.hip.dqdt(i)];
     motor_velocities = transpose(jacobian) * dqdt;
     
-    motors.velocity.hip        = motor_velocities(5);
+    motors.velocity.hip        = motor_velocities(1);
     motors.velocity.knee       = motor_velocities(3);
-    motors.velocity.ankle      = motor_velocities(1);
-    motors.velocity.hip_knee   = motor_velocities(4);
-    motors.velocity.knee_ankle = motor_velocities(2);
-       
+    motors.velocity.ankle      = motor_velocities(5);
+    motors.velocity.hip_knee   = motor_velocities(2);
+    motors.velocity.knee_ankle = motor_velocities(4);
+    
+    
     
     
     
@@ -159,7 +160,7 @@ plot (data.velocities.hip_knee, 'Color', [1,0,0]);
 
 plot (diff(data.lengths.knee_ankle), 'Color', [0,1,0]);
 plot (data.velocities.knee_ankle, 'Color', [0,1,0]);
-legend ('hip-knee (diff)', 'hip-knee (J)','knee-ankle (diff)','knee-ankle (J)');
+legend ('hip-knee', 'hip-knee','knee-ankle','knee-ankle');
 title('Check velocity (bi-articular)');
 
 

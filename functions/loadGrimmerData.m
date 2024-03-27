@@ -40,9 +40,9 @@ data.hip.angle   = -deg2rad(data.hip.angleDeg)   - pi/2;
 data.knee.angle  = +deg2rad(data.knee.angleDeg)  - pi/2;
 data.ankle.angle = -deg2rad(data.ankle.angleDeg) - pi/2;
 
-data.hip.dqdt    = deg2rad(data.hip.dqdt);
-data.knee.dqdt   = deg2rad(data.knee.dqdt);
-data.ankle.dqdt  = deg2rad(data.ankle.dqdt);
+data.hip.dqdt    = -deg2rad(data.hip.dqdt);
+data.knee.dqdt   = +deg2rad(data.knee.dqdt);
+data.ankle.dqdt  = -deg2rad(data.ankle.dqdt);
 
 N = size(data.hip.angle, 1);
 end

@@ -7,18 +7,18 @@ function [handle] = init_figure_robot()
 
     %% Robot joints
 
-    handle.joint.neck   = plot(0,0,'b.', 'MarkerSize',20);
-    handle.joint.hip    = plot(0,0,'b.', 'MarkerSize',20);
-    handle.joint.knee   = plot(0,0,'b.', 'MarkerSize',20);
-    handle.joint.ankle  = plot(0,0,'b.', 'MarkerSize',20);
-    handle.joint.toes   = plot(0,0,'b.', 'MarkerSize',20);
+    handle.joint.neck   = plot(0,0,'k.', 'MarkerSize',20);
+    handle.joint.hip    = plot(0,0,'k.', 'MarkerSize',20);
+    handle.joint.knee   = plot(0,0,'k.', 'MarkerSize',20);
+    handle.joint.ankle  = plot(0,0,'k.', 'MarkerSize',20);
+    handle.joint.toes   = plot(0,0,'k.', 'MarkerSize',20);
 
 
     %% Segments
-    handle.segment.trunk   = line ([0,0], [0,0], 'Color', 'r');
-    handle.segment.thigh   = line ([0,0], [0,0], 'Color', 'r');
-    handle.segment.shang   = line ([0,0], [0,0], 'Color', 'r');
-    handle.segment.foot    = line ([0,0], [0,0], 'Color', 'r');
+    handle.segment.trunk   = line ([0,0], [0,0], 'LineWidth', 3, 'Color', 'k');
+    handle.segment.thigh   = line ([0,0], [0,0], 'LineWidth', 3, 'Color', 'k');
+    handle.segment.shang   = line ([0,0], [0,0], 'LineWidth', 3, 'Color', 'k');
+    handle.segment.foot    = line ([0,0], [0,0], 'LineWidth', 3, 'Color', 'k');
 
 
     %% Motors
@@ -36,13 +36,13 @@ function [handle] = init_figure_robot()
     handle.motor.unitVectors.knee_ankle = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
     
     %% Lever vectors
-    handle.motor.leverVectors.hip        = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
-    handle.motor.leverVectors.knee       = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
-    handle.motor.leverVectors.ankle      = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
-    handle.motor.leverVectors.hip_knee.hip   = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
-    handle.motor.leverVectors.hip_knee.knee  = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
-    handle.motor.leverVectors.knee_ankle.knee = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
-    handle.motor.leverVectors.knee_ankle.ankle  = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,1], 'Marker', '.');
+    handle.motor.leverVectors.hip        = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [1,0,0,1], 'Marker', '.');
+    handle.motor.leverVectors.knee       = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,1,0,1], 'Marker', '.');
+    handle.motor.leverVectors.ankle      = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,1,1], 'Marker', '.');
+    handle.motor.leverVectors.hip_knee.hip   = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,1,1,1], 'Marker', '.');
+    handle.motor.leverVectors.hip_knee.knee  = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0,1,1,1], 'Marker', '.');
+    handle.motor.leverVectors.knee_ankle.knee = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [1,0.5,0,1], 'Marker', '.');
+    handle.motor.leverVectors.knee_ankle.ankle  = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [1,0.5,0,1], 'Marker', '.');
     
     % %% Torques
     %
