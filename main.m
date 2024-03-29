@@ -5,6 +5,17 @@ addpath ('functions/');
 %% Global variables (to keep best optimization)
 global best_solution;
 
+%% Current index of the main optimization loop
+global indexBest 
+indexBest = 1;
+
+global gConfigHandler;
+
+id = 0;
+
+delete (sprintf ('output/optim-%d.csv',id))
+delete (sprintf ('output/optim-%d.mat',id))
+
 
 %% Load dataset
 % dataGrimmer contains the data (1000 sample per motion)
@@ -18,13 +29,14 @@ global best_solution;
 %motionNames = ["Lifting_Stoop"];
 %motionNames = ["Recovery"];
 %motionNames = ["Running_26"];
-motionNames = ["Running_40"];
+%motionNames = ["Running_40"];
 %motionNames = ["Sit_to_Stand"];
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-%motionNames = [ "Walking_11"];
+motionNames = [ "Walking_11"];
 %motionNames = [ "Walking_16"];
+
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
 
 % plot (dataGrimmer.hip.theta);
@@ -33,7 +45,7 @@ motionNames = ["Running_40"];
 
 
 start = 1;
-step = 1;
+step = 10;
 stop = 1000;
 
 
@@ -47,59 +59,29 @@ dimensions.foot = [121, -54, 0, 1];
 global matrices;
 matrices.translation = computeTranslationMatrices(dimensions);
 
+% Animation handler
 global gHandle;
-gHandle = init_figure_robot();
+
 
 
 %% Enable/disable motors
 motors.enable.hip = true;
 motors.enable.knee = true;
 motors.enable.ankle = true;
-motors.enable.hip_knee = true;
-motors.enable.knee_ankle = true;
+motors.enable.hip_knee = false;
+motors.enable.knee_ankle = false;
 
 
 
-%% Initial configuration
-x= [ -80 , 400, -80, 400, 0 ...     % Hip { Xh Yh Xl Yl Offset }
-    80,  200,  40,  380, 0 ...     % Knee { Xh Yh Xl Yl Offset }
-    60,  300,  -60,  20, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
-    -50,  -50,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
-    -30,  100,  -160,  30, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
-
-% Append configuration to motors
-motors.parameters = appendX2motors(x);
-
-%% Run code
-motors = core(motors, dataGrimmer, start, step, stop)
-
-% Plot results
-figure; 
-plot (motors.dataset_motors_forces); 
-grid on;
-title ('Forces');
-
-figure; 
-plot (motors.dataset_motors_max_force); 
-grid on;
-title ('Max force');
-
-figure;
-plot (motors.dataset_motors_power); 
-grid on;
-title ('Power');
-
-
-id = 0;
 
 
 
 %% Boundaries
 lb =  [ -85     -100    -80,    50      -100 ...    % Hip { Xh Yh Xl Yl Offset }
     -80     -80     -80,    278     -100 ...        % Knee { Xh Yh Xl Yl Offset }
-    -80     -0      -200,   -54     -100 ...        % Ankle { Xh Yh Xl Yl Offset }
+    -80     0      -200,    30     -100 ...        % Ankle { Xh Yh Xl Yl Offset }
     -80     -80     -80,    278     -100 ...        % Hip-Knee { Xh Yh Xl Yl Offset }
-    -80    -80      -201,   0       -100];          % Knee-Ankle { Xh Yh Xl Yl Offset }
+    -80    -80      -201,   30       -100];          % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
 ub =[   85      500     80      480     100 ...     % Hip { Xh Yh Xl Yl Offset }
@@ -109,29 +91,40 @@ ub =[   85      500     80      480     100 ...     % Hip { Xh Yh Xl Yl Offset }
     80      80      -39,    134     100];           % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
+%% Initial configuration (Override in the loop to start from random positions)
+x= [ -80 , 400, -80, 400, 0 ...     % Hip { Xh Yh Xl Yl Offset }
+    80,  200,  40,  380, 0 ...     % Knee { Xh Yh Xl Yl Offset }
+    -60,  300,  -240,  35, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
+    -50,  -50,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
+    -30,  100,  -160,  35, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
+
+
+%% Plot initial configuration
+figure(1); hold on; grid on;
+gConfigHandler = plot_initial_configuration(x,motors);
 
 
 
-
-%
-% %% Plot initial configuration
-% figure; hold on; grid on;
-% plot_initial_configuration(x,motors);
-% %plot_initial_configuration_bound(x, lb, ub, motors);
-% drawnow;
-%
-% core(motors, dataGrimmer, start, step, stop);
-% return;
-%
-%
-% %% Anonymous function for calling the core from fminsearchbnd
-% paramCore = @(x)coreOptim(x,motors, dataset, start, step, stop, id);
-%
-%
-% %% Optimization
-% disp ('Running optimization, it may really take a while...'); tic
-% options = optimset('Display','iter', 'TolFun', 1e-2, 'TolX', 0.1); % 'MaxFunEvals',100);
-% [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,lb, ub, options);
-% toc
-
+while (1)
+    % Create a random initial position
+    x=(ub-lb).*rand(1,25)+lb;   
+    
+    
+    % figure(2)
+    % gHandle = init_figure_robot();
+    
+    %% Anonymous function for calling the core from fminsearchbnd
+    paramCore = @(x)coreOptim(x,motors, dataGrimmer, start, step, stop, id);
+    
+    
+    %% Optimization
+    disp ('Running optimization, it may really take a while...'); tic
+    options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); % 'MaxFunEvals',100);
+    [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,lb, ub, options);
+    toc
+    
+    indexBest = indexBest + 1;
+end
+%figure(1);
+%plot_initial_configuration_bound(x, lb, ub, motors);
 disp ('done')

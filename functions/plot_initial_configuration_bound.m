@@ -38,8 +38,7 @@ function [handle] = plot_initial_configuration_bound(x, lb, ub, motors)
     % Hip motor
     %line ([x(1) 0],[x(2) x(2)], 'LineWidth', 3, 'Color', 'k');
     %line ([x(3) 0],[x(4)-380 x(4)-380], 'LineWidth', 3, 'Color', 'k');
-    offset_hip = x(5)
-    offset_knee = x(10)
+    
     if (motors.enable.hip)
         %plot (x(1),x(5)+80,'k.', 'MarkerSize', 30);
         line ([x(1) x(3)],[x(2) x(4)-380], 'LineWidth', 3, 'Color', [1,0,0,0.5], 'Marker', '.', 'MarkerSize', 10);

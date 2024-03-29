@@ -1,25 +1,28 @@
-function [criteria] = coreOptim(x, motors, dataset, start, step, stop, id)
+function [criteria] = coreOptim(x, motors, dataGrimmer, start, step, stop, id)
 
     global best_solution;
     global indexBest;
     global outputData;
-    
+    global gConfigHandler;
 
     %% Add motor coordinates to structure
-    motors = appendX2motors(x, motors);
+    %motors = appendX2motors(x, motors);
+    motors.parameters = appendX2motors(x);
 
     %% Run core
-    motors = core(motors, dataset, start, step, stop);
+    motors = core(motors, dataGrimmer, start, step, stop);
     
     
-    %% Optimization criteria    
-    feasable = mean(motors.feasable);
-    efficiency = mean(motors.efficiency);
-    averagePower = mean(motors.power.input);
+    %% Optimization criteria  
+    averageInputPower = mean(motors.dataset_input_power);
+    averageOutputPower = mean(motors.dataset_output_power);
+    %efficiency = mean(motors.dataset_efficiency);
+    efficiency = averageOutputPower / averageInputPower;
     
+    maxForce = max(motors.dataset_motors_max_force(:));
         
     %% Optimization criteria
-    criteria = 1-feasable;
+    criteria = maxForce;
              
     
     %% Update the best solution if needed
@@ -29,7 +32,7 @@ function [criteria] = coreOptim(x, motors, dataset, start, step, stop, id)
         %%
         %% STORE POWER IN OUTPUTDATA
         %%
-        data = [now, indexBest, x, feasable, averagePower, criteria];
+        data = [now, indexBest, x, maxForce, averageInputPower, averageOutputPower, efficiency, criteria];
         outputData = [outputData; data];
         
         % Save in .csv and .mat files
@@ -38,15 +41,17 @@ function [criteria] = coreOptim(x, motors, dataset, start, step, stop, id)
         
         %% Update and display the best solution
         best_solution = data;
-        fprintf ('-------------------------------------\n');
+        fprintf ('------------------------------------- iter %d\n', indexBest);
         fprintf ('New best solution!\n');
-        fprintf ('\tFeasability = %.2f %%\n',feasable *100);
+        fprintf ('\tAverage input power = %.4fW\n',averageInputPower);
+        fprintf ('\tAverage output power = %.4fW\n',averageOutputPower);
         fprintf ('\tEfficiency = %.6f\n', efficiency);        
-        fprintf ('\tAverage power = %.0fW\n',averagePower);
+        fprintf ('\tMax Weight= %.1f/%.1fkg\n',13/maxForce, 67.1/maxForce);
+        fprintf ('\tMax Force = %.1fN\n',maxForce);
         fprintf ('\tCriteria = %f\n',criteria);
         fprintf ('-------------------------------------\n');
     end
-    
-
+    update_initial_configuration(gConfigHandler, x, motors);
+    drawnow();
 end
 
