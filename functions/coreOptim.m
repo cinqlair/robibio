@@ -51,7 +51,7 @@ function [criteria] = coreOptim(x, motors, dataGrimmer, start, step, stop, id)
         fprintf ('\tCriteria = %f\n',criteria);
         fprintf ('-------------------------------------\n');
     end
-    update_initial_configuration(gConfigHandler, x, motors);
-    drawnow();
+    %update_initial_configuration(gConfigHandler, x, motors);
+    %drawnow();
 end
 

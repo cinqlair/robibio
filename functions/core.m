@@ -93,8 +93,8 @@ function [motors] = core(motors, dataGrimmer, start, step, stop)
         index = index+1;
         
             
-        %update_figure_robot(gHandle, trajectories, motors);    
-        %drawnow();
+        update_figure_robot(gHandle, trajectories, motors);    
+        drawnow();
     end
     
 %     figure(3);

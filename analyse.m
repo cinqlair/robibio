@@ -3,7 +3,7 @@ clear all;
 clc;
 
 
-id=0;
+id=2;
 
 %load (sprintf ('../dataset/output/optim-%d.mat', id));
 filename = sprintf ('output/optim-%d.csv', id);
@@ -56,9 +56,12 @@ title('Max Robot Weight');
 grid on;
 
 
-
 subplot (2,2,4);
 hold on;
 plot (hours, efficiency);
 title ('Efficiency');
 grid on;
+
+fprintf ('Max force = %.2fN\n', min(maxForce));
+fprintf ('Max weight= %.2fkg\n', 67.1/min(maxForce));
+

@@ -11,7 +11,7 @@ indexBest = 1;
 
 global gConfigHandler;
 
-id = 0;
+id = 5;
 
 delete (sprintf ('output/optim-%d.csv',id))
 delete (sprintf ('output/optim-%d.mat',id))
@@ -31,10 +31,10 @@ delete (sprintf ('output/optim-%d.mat',id))
 %motionNames = ["Running_26"];
 %motionNames = ["Running_40"];
 %motionNames = ["Sit_to_Stand"];
-%motionNames = ["Squat_Jump"];
+motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-motionNames = [ "Walking_11"];
+%motionNames = [ "Walking_11"];
 %motionNames = [ "Walking_16"];
 
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
@@ -45,7 +45,7 @@ motionNames = [ "Walking_11"];
 
 
 start = 1;
-step = 10;
+step = 1;
 stop = 1000;
 
 
@@ -68,8 +68,8 @@ global gHandle;
 motors.enable.hip = true;
 motors.enable.knee = true;
 motors.enable.ankle = true;
-motors.enable.hip_knee = false;
-motors.enable.knee_ankle = false;
+motors.enable.hip_knee = true;
+motors.enable.knee_ankle = true;
 
 
 
@@ -118,7 +118,7 @@ while (1)
     
     
     %% Optimization
-    disp ('Running optimization, it may really take a while...'); tic
+    fprintf ('Running optimization #%d, it may really take a while...\n', indexBest); tic
     options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); % 'MaxFunEvals',100);
     [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,lb, ub, options);
     toc
