@@ -15,8 +15,8 @@ addpath ('../functions/');
 %motionNames = ["Lifting_Stoop"];
 %motionNames = ["Recovery"];
 %motionNames = ["Running_26"];
-%motionNames = ["Running_40"];
-motionNames = ["Sit_to_Stand"];
+motionNames = ["Running_40"];
+%motionNames = ["Sit_to_Stand"];
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
@@ -42,21 +42,24 @@ mean(abs(dataGrimmer.ankle.power)))
 figure
 subplot(3,2,1); hold on 
 plot (dataGrimmer.hip.torque);
-plot (dataGrimmer.hip.dqdt);
+%plot (dataGrimmer.hip.dqdt);
+legend('Torque', 'Velocity');
 title('Hip Torque [Nm/kg]');
 
 grid on;
 
 subplot(3,2,3); hold on;
 plot (dataGrimmer.knee.torque);
-plot (dataGrimmer.knee.dqdt);
+%plot (dataGrimmer.knee.dqdt);
+legend('Torque', 'Velocity');
 title('Knee Torque [Nm/kg]');
 
 grid on;
 
 subplot(3,2,5); hold on;
 plot (dataGrimmer.ankle.torque);
-plot (dataGrimmer.ankle.dqdt);
+%plot (dataGrimmer.ankle.dqdt);
+legend('Torque', 'Velocity');
 title('Ankle Torque [Nm/kg]');
 grid on;
 

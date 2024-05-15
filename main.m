@@ -11,7 +11,7 @@ indexBest = 1;
 
 global gConfigHandler;
 
-id = 5;
+id = 1000;
 
 delete (sprintf ('output/optim-%d.csv',id))
 delete (sprintf ('output/optim-%d.mat',id))
@@ -110,8 +110,8 @@ while (1)
     x=(ub-lb).*rand(1,25)+lb;   
     
     
-    % figure(2)
-    % gHandle = init_figure_robot();
+    figure(2)
+    gHandle = init_figure_robot();
     
     %% Anonymous function for calling the core from fminsearchbnd
     paramCore = @(x)coreOptim(x,motors, dataGrimmer, start, step, stop, id);
