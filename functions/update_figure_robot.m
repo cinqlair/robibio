@@ -44,6 +44,9 @@ if (robot.motors.enable.hip)
     % Slider end
     set(gHandle.motor.slidersEnd.hip, 'XData', [robot.motors.slidersEnd.hip.trunk(1), robot.motors.slidersEnd.hip.thigh(1)]);
     set(gHandle.motor.slidersEnd.hip, 'YData', [robot.motors.slidersEnd.hip.trunk(2), robot.motors.slidersEnd.hip.thigh(2)]);
+    % Stator end
+    set(gHandle.motor.statorsEnd.hip, 'XData', [robot.motors.statorsEnd.hip.trunk(1), robot.motors.statorsEnd.hip.thigh(1)]);
+    set(gHandle.motor.statorsEnd.hip, 'YData', [robot.motors.statorsEnd.hip.trunk(2), robot.motors.statorsEnd.hip.thigh(2)]);
     % Force vector
     set(gHandle.motor.forceVectors.hip,  'XData', [robot.motors.trajectories.hip.thigh(1), robot.motors.trajectories.hip.thigh(1) + 10*robot.motors.forceVectors.hip(1)]);
     set(gHandle.motor.forceVectors.hip,  'YData', [robot.motors.trajectories.hip.thigh(2), robot.motors.trajectories.hip.thigh(2) + 10*robot.motors.forceVectors.hip(2)]);
@@ -63,6 +66,9 @@ if (robot.motors.enable.knee)
     % Slider end
     set(gHandle.motor.slidersEnd.knee, 'XData', [robot.motors.slidersEnd.knee.thigh(1), robot.motors.slidersEnd.knee.shang(1)]);
     set(gHandle.motor.slidersEnd.knee, 'YData', [robot.motors.slidersEnd.knee.thigh(2), robot.motors.slidersEnd.knee.shang(2)]);
+    % Stator end
+    set(gHandle.motor.statorsEnd.knee, 'XData', [robot.motors.statorsEnd.knee.thigh(1), robot.motors.statorsEnd.knee.shang(1)]);
+    set(gHandle.motor.statorsEnd.knee, 'YData', [robot.motors.statorsEnd.knee.thigh(2), robot.motors.statorsEnd.knee.shang(2)]);
     % Force vector
     set(gHandle.motor.forceVectors.knee,  'XData', [robot.motors.trajectories.knee.shang(1), robot.motors.trajectories.knee.shang(1) + 10*robot.motors.forceVectors.knee(1)]);
     set(gHandle.motor.forceVectors.knee,  'YData', [robot.motors.trajectories.knee.shang(2), robot.motors.trajectories.knee.shang(2) + 10*robot.motors.forceVectors.knee(2)]);
@@ -82,6 +88,9 @@ if (robot.motors.enable.ankle)
     % Slider end
     set(gHandle.motor.slidersEnd.ankle, 'XData', [robot.motors.slidersEnd.ankle.shang(1), robot.motors.slidersEnd.ankle.foot(1)]);
     set(gHandle.motor.slidersEnd.ankle, 'YData', [robot.motors.slidersEnd.ankle.shang(2), robot.motors.slidersEnd.ankle.foot(2)]);
+    % Stator end
+    set(gHandle.motor.statorsEnd.ankle, 'XData', [robot.motors.statorsEnd.ankle.shang(1), robot.motors.statorsEnd.ankle.foot(1)]);
+    set(gHandle.motor.statorsEnd.ankle, 'YData', [robot.motors.statorsEnd.ankle.shang(2), robot.motors.statorsEnd.ankle.foot(2)]);
     % Force vector
     set(gHandle.motor.forceVectors.ankle,  'XData', [robot.motors.trajectories.ankle.foot(1), robot.motors.trajectories.ankle.foot(1) + 10*robot.motors.forceVectors.ankle(1)]);
     set(gHandle.motor.forceVectors.ankle,  'YData', [robot.motors.trajectories.ankle.foot(2), robot.motors.trajectories.ankle.foot(2) + 10*robot.motors.forceVectors.ankle(2)]);    
@@ -103,6 +112,9 @@ if (robot.motors.enable.hip_knee)
     % Slider end
     set(gHandle.motor.slidersEnd.hip_knee, 'XData', [robot.motors.slidersEnd.hip_knee.trunk(1), robot.motors.slidersEnd.hip_knee.shang(1)]);
     set(gHandle.motor.slidersEnd.hip_knee, 'YData', [robot.motors.slidersEnd.hip_knee.trunk(2), robot.motors.slidersEnd.hip_knee.shang(2)]);
+    % Stator end
+    set(gHandle.motor.statorsEnd.hip_knee, 'XData', [robot.motors.statorsEnd.hip_knee.trunk(1), robot.motors.statorsEnd.hip_knee.shang(1)]);
+    set(gHandle.motor.statorsEnd.hip_knee, 'YData', [robot.motors.statorsEnd.hip_knee.trunk(2), robot.motors.statorsEnd.hip_knee.shang(2)]);
     % Forcevector
     set(gHandle.motor.forceVectors.hip_knee,  'XData', [robot.motors.trajectories.hip_knee.shang(1), robot.motors.trajectories.hip_knee.shang(1) + 100*robot.motors.forceVectors.hip_knee(1)]);
     set(gHandle.motor.forceVectors.hip_knee,  'YData', [robot.motors.trajectories.hip_knee.shang(2), robot.motors.trajectories.hip_knee.shang(2) + 100*robot.motors.forceVectors.hip_knee(2)]);
@@ -125,6 +137,9 @@ if (robot.motors.enable.knee_ankle)
     % Slider end
     set(gHandle.motor.slidersEnd.knee_ankle, 'XData', [robot.motors.slidersEnd.knee_ankle.thigh(1), robot.motors.slidersEnd.knee_ankle.foot(1)]);
     set(gHandle.motor.slidersEnd.knee_ankle, 'YData', [robot.motors.slidersEnd.knee_ankle.thigh(2), robot.motors.slidersEnd.knee_ankle.foot(2)]);
+    % Stator end
+    set(gHandle.motor.statorsEnd.knee_ankle, 'XData', [robot.motors.statorsEnd.knee_ankle.thigh(1), robot.motors.statorsEnd.knee_ankle.foot(1)]);
+    set(gHandle.motor.statorsEnd.knee_ankle, 'YData', [robot.motors.statorsEnd.knee_ankle.thigh(2), robot.motors.statorsEnd.knee_ankle.foot(2)]);
     % Unit vector
     set(gHandle.motor.forceVectors.knee_ankle,  'XData', [robot.motors.trajectories.knee_ankle.foot(1), robot.motors.trajectories.knee_ankle.foot(1) + 100*robot.motors.forceVectors.knee_ankle(1)]);
     set(gHandle.motor.forceVectors.knee_ankle,  'YData', [robot.motors.trajectories.knee_ankle.foot(2), robot.motors.trajectories.knee_ankle.foot(2) + 100*robot.motors.forceVectors.knee_ankle(2)]);

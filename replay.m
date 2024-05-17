@@ -88,6 +88,13 @@ robot.motors.sliderLength.ankle = 290;
 robot.motors.sliderLength.hip_knee = 290;
 robot.motors.sliderLength.knee_ankle = 290;
 
+% Stator length [mm]
+robot.motors.statorLength.hip = 105;
+robot.motors.statorLength.knee = 105;
+robot.motors.statorLength.ankle = 105;
+robot.motors.statorLength.hip_knee = 105;
+robot.motors.statorLength.knee_ankle = 105;
+
 % Length of the ball joint at the end of the slider [mm]
 robot.motors.ballJointLength = 20;
 
@@ -95,26 +102,26 @@ robot.motors.ballJointLength = 20;
 
 
 %% Boundaries
-robot.motors.lb =  [ -85     -100    -80,    50      -100 ...    % Hip { Xh Yh Xl Yl Offset }
-    -80     -80     -80,    278     -100 ...        % Knee { Xh Yh Xl Yl Offset }
-    -80     0      -200,    30     -100 ...        % Ankle { Xh Yh Xl Yl Offset }
-    -80     -80     -80,    278     -100 ...        % Hip-Knee { Xh Yh Xl Yl Offset }
-    -80    -80      -201,   30       -100];          % Knee-Ankle { Xh Yh Xl Yl Offset }
+robot.motors.lb =  [ -85     -100    -80,    50      -100, 35 ...    % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
+    -80     -80     -80,    278     -100, 35 ...        % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+    -80     0      -200,    30     -100, 35 ...        % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
+    -80     -80     -80,    278     -100, 35 ...        % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+    -80    -80      -201,   30       -100, 35];          % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
 
 
-robot.motors.ub =[   85      500     80      480     100 ...     % Hip { Xh Yh Xl Yl Offset }
-    80      480     80,     438     100 ...         % Knee { Xh Yh Xl Yl Offset }
-    80      350     -41,    130     100 ...         % Ankle { Xh Yh Xl Yl Offset }
-    80      80      80,     438     100 ...         % Hip-Knee { Xh Yh Xl Yl Offset }
-    80      80      -39,    134     100];           % Knee-Ankle { Xh Yh Xl Yl Offset }
+robot.motors.ub =[   85      500     80      480     100, 35 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
+    80      480     80,     438     100, 35 ...         % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+    80      350     -41,    130     100, 35 ...         % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
+    80      80      80,     438     100, 35 ...         % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+    80      80      -39,    134     100, 35];           % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
 
 
 %% Initial configuration (Override in the loop to start from random positions)
-x= [ -80 , 400, -80, 400, 0 ...     % Hip { Xh Yh Xl Yl Offset }
-    80,  200,  40,  380, 0 ...     % Knee { Xh Yh Xl Yl Offset }
-    -60,  300,  -240,  35, 0 ...   % Ankle { Xh Yh Xl Yl Offset }
-    -50,  -50,  -50,  300, 0 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
-    -30,  100,  -160,  35, 0 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
+x= [ -80 , 300, -80, 400, 50, 35 ...     % Hip { Xh Yh Xl Yl Offset }
+    80,  200,  40,  380, 0, 35 ...     % Knee { Xh Yh Xl Yl Offset }
+    -60,  200,  -240,  35, 0, 35 ...   % Ankle { Xh Yh Xl Yl Offset }
+    -50,  -50,  -50,  300, 100, 35 ...   % Hip-Knee { Xh Yh Xl Yl Offset }
+    -60,  -100,  -160,  35, 30, 35 ];    % Knee-Ankle { Xh Yh Xl Yl Offset }
 
 
 
