@@ -22,10 +22,10 @@ addpath ('../functions/')
 motionNames = [ "Walking_11"];
 %motionNames = [ "Walking_16"];
 
-[dataGrimmer, N] = loadGrimmerData('./', motionNames);
+[dataGrimmer, N] = loadGrimmerData('../', motionNames);
 
 start = 1;
-step = 1;
+step = 10;
 stop = N;
 
 %% Robot segments dimensions
@@ -50,12 +50,17 @@ motors.parameters.knee_ankle.reference = str2func('motor_P01_48x240_30x240');
 
 
 %% Enable/disable motors
-motors.enable.hip = false;
-motors.enable.knee = false;
+motors.enable.hip = true;
+motors.enable.knee = true;
 motors.enable.ankle = true;
 motors.enable.hip_knee = true;
 motors.enable.knee_ankle = true;
 
+motors.sliderLength.hip = 290;
+motors.sliderLength.knee = 290;
+motors.sliderLength.ankle = 290;
+motors.sliderLength.hip_knee = 290;
+motors.sliderLength.knee_ankle = 290;
     
     
 %% Motor boundaries
@@ -100,8 +105,8 @@ while (1)
           
     
     X(end+1,:) = [now x max(motors.dataset_motors_max_force(:)) mean(motors.dataset_efficiency) sum(motors.dataset_input_power)];
-    save('random_initial_geometries/data/initial_3_walking11', 'X');
-    fprintf('Max Force=%.1f %% \tEfficiency=%.1f %% \tPower=%.0fW\n', 100*X(end, end-2), 100*X(end, end-1), X(end, end));
+    save('data/initial_3_walking11', 'X');
+    fprintf('Max Force=%.1f %% \tEfficiency=%.1f %% \tPower=%.0fW\n', max(X(end, end-2)), 100*X(end, end-1), X(end, end));
     
     
     close all;

@@ -1,10 +1,10 @@
-function [powers] = computeMotorPower(motors, forces)
+function [powers] = computeMotorPower(robot)
 
-    powers.hip = forces(5) * motors.velocity.hip;
-    powers.knee = forces(3) * motors.velocity.knee;
-    powers.ankle = forces(1) * motors.velocity.ankle;
-    powers.hip_knee = forces(4) * motors.velocity.hip_knee;
-    powers.knee_ankle = forces(2) * motors.velocity.knee_ankle;   
+    powers.hip = robot.motors.forces(5) * robot.motors.velocity.hip;
+    powers.knee = robot.motors.forces(3) * robot.motors.velocity.knee;
+    powers.ankle = robot.motors.forces(1) * robot.motors.velocity.ankle;
+    powers.hip_knee = robot.motors.forces(4) * robot.motors.velocity.hip_knee;
+    powers.knee_ankle = robot.motors.forces(2) * robot.motors.velocity.knee_ankle;   
     
 end
 
