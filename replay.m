@@ -39,11 +39,11 @@ global gConfigHandler;
 %motionNames = ["Recovery"];
 %motionNames = ["Running_26"];
 %motionNames = ["Running_40"];
-motionNames = ["Sit_to_Stand"];
+%motionNames = ["Sit_to_Stand"];
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-%motionNames = [ "Walking_11"];
+motionNames = [ "Walking_11"];
 %motionNames = [ "Walking_16"];
 
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
@@ -72,22 +72,24 @@ robot.matrices.translation = computeTranslationMatrices(dimensions);
 global gHandle;
 
 
+%% Motors parameters
 
-%% Enable/disable motors
+% Enable/disable motors
 robot.motors.enable.hip = true;
 robot.motors.enable.knee = true;
 robot.motors.enable.ankle = true;
 robot.motors.enable.hip_knee = true;
 robot.motors.enable.knee_ankle = true;
 
-
+% Sliders length [mm]
 robot.motors.sliderLength.hip = 290;
 robot.motors.sliderLength.knee = 290;
 robot.motors.sliderLength.ankle = 290;
 robot.motors.sliderLength.hip_knee = 290;
 robot.motors.sliderLength.knee_ankle = 290;
 
-
+% Length of the ball joint at the end of the slider [mm]
+robot.motors.ballJointLength = 20;
 
 
 

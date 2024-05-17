@@ -51,6 +51,12 @@ function [handle] = init_figure_robot()
     handle.motor.leverVectors.knee_ankle.knee = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [1,0.5,0,1], 'Marker', '.');
     handle.motor.leverVectors.knee_ankle.ankle  = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [1,0.5,0,1], 'Marker', '.');
     
+    %% Slider end
+    handle.motor.slidersEnd.hip           = plot(0,0,'y.', 'MarkerSize',20);
+    handle.motor.slidersEnd.knee          = plot(0,0,'y.', 'MarkerSize',20);
+    handle.motor.slidersEnd.ankle         = plot(0,0,'y.', 'MarkerSize',20);
+    handle.motor.slidersEnd.hip_knee      = plot(0,0,'y.', 'MarkerSize',20);
+    handle.motor.slidersEnd.knee_ankle    = plot(0,0,'y.', 'MarkerSize',20);
     % %% Torques
     %
     %     handle.torque.Left.Knee     = plot(0,0,'ro', 'MarkerSize',0.1);

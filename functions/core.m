@@ -37,7 +37,7 @@ for i=start:step:stop
     
     %% TODO ADD OFFSET AND ROTULE
     
-    
+    robot.motors.slidersEnd = computeSlidersEnd(robot);
     robot.motors.maxForces = computeMotorMaxForce(robot);
     
     
