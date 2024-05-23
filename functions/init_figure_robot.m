@@ -20,6 +20,12 @@ function [handle] = init_figure_robot()
     handle.segment.shang   = line ([0,0], [0,0], 'LineWidth', 3, 'Color', 'k');
     handle.segment.foot    = line ([0,0], [0,0], 'LineWidth', 3, 'Color', 'k');
 
+    %% Motor joints
+    handle.motor.joint.hip   = plot(0,0,'o', 'MarkerSize',10, 'Color', [1,0,0,0.1]);
+    handle.motor.joint.knee    = plot(0,0,'o', 'MarkerSize',10, 'Color', [0,1,0,0.1]);
+    handle.motor.joint.ankle   = plot(0,0,'o', 'MarkerSize',10, 'Color', [0,0,1,0.1]);
+    handle.motor.joint.hip_knee  = plot(0,0,'o', 'MarkerSize',10, 'Color', [0,1,1,0.1]);
+    handle.motor.joint.knee_ankle   = plot(0,0,'o', 'MarkerSize',10, 'Color', [1,0.5,0,0.1]);
 
     %% Motors
     handle.motor.hip           = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [1,0,0,0.1], 'Marker', 'o');

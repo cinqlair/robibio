@@ -25,6 +25,7 @@ for i=start:step:stop
     
     
     %% Compute motors attachment coordinates, trajectories and length
+    robot.motors.joints.trajectories = computeMotorJointsTrajectories(robot);
     robot.motors.trajectories = computeMotorTrajectories(robot);
     robot.motors.lengths = computeMotorLengths(robot);
     

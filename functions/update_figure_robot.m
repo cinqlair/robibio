@@ -32,6 +32,9 @@ set(gHandle.segment.foot,    'XData', [robot.joints.trajectories.ankle(1), robot
 %% Update motors
 %% Hip
 if (robot.motors.enable.hip)
+    
+    % Joint
+    set(gHandle.motor.joint.hip,  'XData', robot.motors.joints.trajectories.hip.trunk(1), 'YData', robot.motors.joints.trajectories.hip.trunk(2));
     % Motor
     set(gHandle.motor.hip,  'XData', [robot.motors.trajectories.hip.trunk(1),  robot.motors.trajectories.hip.thigh(1)]);
     set(gHandle.motor.hip,  'YData', [robot.motors.trajectories.hip.trunk(2), robot.motors.trajectories.hip.thigh(2)]);
@@ -54,6 +57,8 @@ end
 
 %% Knee
 if (robot.motors.enable.knee)
+    % Joint
+    set(gHandle.motor.joint.knee,  'XData', robot.motors.joints.trajectories.knee.thigh(1), 'YData', robot.motors.joints.trajectories.knee.thigh(2));
     % Motor
     set(gHandle.motor.knee, 'XData', [robot.motors.trajectories.knee.thigh(1),  robot.motors.trajectories.knee.shang(1)]);
     set(gHandle.motor.knee, 'YData', [robot.motors.trajectories.knee.thigh(2),  robot.motors.trajectories.knee.shang(2)]);
@@ -76,6 +81,8 @@ end
 
 %% Ankle
 if (robot.motors.enable.ankle)
+    % Joint
+    set(gHandle.motor.joint.ankle,  'XData', robot.motors.joints.trajectories.ankle.shang(1), 'YData', robot.motors.joints.trajectories.ankle.shang(2));
     % Motor
     set(gHandle.motor.ankle, 'XData', [robot.motors.trajectories.ankle.shang(1), robot.motors.trajectories.ankle.foot(1)]);
     set(gHandle.motor.ankle, 'YData', [robot.motors.trajectories.ankle.shang(2), robot.motors.trajectories.ankle.foot(2)]);
@@ -98,6 +105,8 @@ end
 
 %% Hip-Knee
 if (robot.motors.enable.hip_knee)
+    % Joint
+    set(gHandle.motor.joint.hip_knee,  'XData', robot.motors.joints.trajectories.hip_knee.trunk(1), 'YData', robot.motors.joints.trajectories.hip_knee.trunk(2));
     % Motor
     set(gHandle.motor.hip_knee, 'XData', [robot.motors.trajectories.hip_knee.trunk(1),  robot.motors.trajectories.hip_knee.shang(1)]);
     set(gHandle.motor.hip_knee, 'YData', [robot.motors.trajectories.hip_knee.trunk(2), robot.motors.trajectories.hip_knee.shang(2)]);
@@ -105,8 +114,8 @@ if (robot.motors.enable.hip_knee)
     set(gHandle.motor.unitVectors.hip_knee,  'XData', [robot.motors.trajectories.hip_knee.shang(1), robot.motors.trajectories.hip_knee.shang(1) + 100*robot.motors.unitVectors.hip_knee(1)]);
     set(gHandle.motor.unitVectors.hip_knee,  'YData', [robot.motors.trajectories.hip_knee.shang(2), robot.motors.trajectories.hip_knee.shang(2) + 100*robot.motors.unitVectors.hip_knee(2)]);
     % Lever vector
-    set(gHandle.motor.leverVectors.hip_knee.hip,  'XData', [robot.joints.trajectories.hip(1), robot.joints.trajectories.hip(1) + 1000*robot.motors.leverVectors.hip_knee.hip(1)]);
-    set(gHandle.motor.leverVectors.hip_knee.hip,  'YData', [robot.joints.trajectories.hip(2), robot.joints.trajectories.hip(2) + 1000*robot.motors.leverVectors.hip_knee.hip(2)]); 
+    set(gHandle.motor.leverVectors.hip_knee.hip,  'XData', [robot.motors.joints.trajectories.hip_knee.trunk(1), robot.joints.trajectories.hip(1) + 1000*robot.motors.leverVectors.hip_knee.hip(1)]);
+    set(gHandle.motor.leverVectors.hip_knee.hip,  'YData', [robot.motors.joints.trajectories.hip_knee.trunk(2), robot.joints.trajectories.hip(2) + 1000*robot.motors.leverVectors.hip_knee.hip(2)]); 
     set(gHandle.motor.leverVectors.hip_knee.knee,  'XData', [robot.joints.trajectories.knee(1), robot.joints.trajectories.knee(1) + 1000*robot.motors.leverVectors.hip_knee.knee(1)]);
     set(gHandle.motor.leverVectors.hip_knee.knee,  'YData', [robot.joints.trajectories.knee(2), robot.joints.trajectories.knee(2) + 1000*robot.motors.leverVectors.hip_knee.knee(2)]); 
     % Slider end
@@ -123,6 +132,8 @@ end;
 
 %% Knee-Ankle
 if (robot.motors.enable.knee_ankle)
+    % Joint
+    set(gHandle.motor.joint.knee_ankle,  'XData', robot.motors.joints.trajectories.knee_ankle.thigh(1), 'YData', robot.motors.joints.trajectories.knee_ankle.thigh(2));
     % Motor
     set(gHandle.motor.knee_ankle, 'XData', [robot.motors.trajectories.knee_ankle.thigh(1),  robot.motors.trajectories.knee_ankle.foot(1)]);
     set(gHandle.motor.knee_ankle, 'YData', [robot.motors.trajectories.knee_ankle.thigh(2), robot.motors.trajectories.knee_ankle.foot(2)]);
@@ -130,8 +141,8 @@ if (robot.motors.enable.knee_ankle)
     set(gHandle.motor.unitVectors.knee_ankle,  'XData', [robot.motors.trajectories.knee_ankle.foot(1), robot.motors.trajectories.knee_ankle.foot(1) + 100*robot.motors.unitVectors.knee_ankle(1)]);
     set(gHandle.motor.unitVectors.knee_ankle,  'YData', [robot.motors.trajectories.knee_ankle.foot(2), robot.motors.trajectories.knee_ankle.foot(2) + 100*robot.motors.unitVectors.knee_ankle(2)]);
     % Lever vector
-    set(gHandle.motor.leverVectors.knee_ankle.knee,  'XData', [robot.joints.trajectories.knee(1), robot.joints.trajectories.knee(1) + 1000*robot.motors.leverVectors.knee_ankle.knee(1)]);
-    set(gHandle.motor.leverVectors.knee_ankle.knee,  'YData', [robot.joints.trajectories.knee(2), robot.joints.trajectories.knee(2) + 1000*robot.motors.leverVectors.knee_ankle.knee(2)]); 
+    set(gHandle.motor.leverVectors.knee_ankle.knee,  'XData', [robot.motors.joints.trajectories.knee_ankle.thigh(1), robot.joints.trajectories.knee(1) + 1000*robot.motors.leverVectors.knee_ankle.knee(1)]);
+    set(gHandle.motor.leverVectors.knee_ankle.knee,  'YData', [robot.motors.joints.trajectories.knee_ankle.thigh(2), robot.joints.trajectories.knee(2) + 1000*robot.motors.leverVectors.knee_ankle.knee(2)]); 
     set(gHandle.motor.leverVectors.knee_ankle.ankle,  'XData', [robot.joints.trajectories.ankle(1), robot.joints.trajectories.ankle(1) + 1000*robot.motors.leverVectors.knee_ankle.ankle(1)]);
     set(gHandle.motor.leverVectors.knee_ankle.ankle,  'YData', [robot.joints.trajectories.ankle(2), robot.joints.trajectories.ankle(2) + 1000*robot.motors.leverVectors.knee_ankle.ankle(2)]);
     % Slider end
