@@ -24,13 +24,13 @@ while (1)
         hash = currentHash;
     end
     
-    if (currentHash ~= hash) 
-        % New run, reset epoch and step
-        disp(sprintf ('New expe | hash = %d', hash));
-        currentHash = hash;
-        epoch = 1;
-        step = 1;
-    end
+%     if (currentHash ~= hash) 
+%         % New run, reset epoch and step
+%         disp(sprintf ('New expe | hash = %d', hash));
+%         currentHash = hash;
+%         epoch = 1;
+%         step = 1;
+%     end
     filename = sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step);
     if (isfile(sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step)))
         load(filename)

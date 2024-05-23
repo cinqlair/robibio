@@ -131,6 +131,7 @@ x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y
 
 while (1)
     % Create a random initial position
+
     %x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;   
     
     
