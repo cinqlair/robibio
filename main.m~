@@ -3,14 +3,16 @@ close all;clear all;clc;
 addpath ('functions/');
 
 global expe;
-expe = 1;
+expe = 0;
 global epoch;
 epoch = 1;
 
 
 %% Create output folders
 system (sprintf('rm -rf output/expe-%d', expe));
-
+mkdir(sprintf('output/expe-%d/epoch-%d', expe, epoch));
+hash = randi(1e6);
+save(sprintf('output/expe-%d/hash.mat', expe),  'hash');
 
 
 %% Global variables (to keep best optimization)
@@ -66,14 +68,11 @@ stop = 1000;
 
 
 
+%% Prepare translation matrices
+robot.matrices.translation = computeTranslationMatrices(dimensions);
+
 
 %% Motors parameters
-
-% Robot segments dimensions
-dimensions.trunk = [0, 500, 0, 1];
-dimensions.thigh = [0, -380, 0, 1];
-dimensions.shang = [0, -358, 0, 1];
-dimensions.foot = [121, -54, 0, 1];
 
 % Enable/disable motors
 robot.motors.enable.hip = true;
@@ -98,9 +97,6 @@ robot.motors.statorLength.knee_ankle = 105;
 
 % Length of the ball joint at the end of the slider [mm]
 robot.motors.ballJointLength = 20;
-
-%% Prepare translation matrices
-robot.matrices.translation = computeTranslationMatrices(dimensions);
 
 
 
@@ -131,7 +127,7 @@ x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y
 
 while (1)
     % Create a random initial position
-    %x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;   
+    x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;   
     
     
     figure(2)
@@ -142,12 +138,12 @@ while (1)
     
     
     %% Optimization
-    fprintf ('Running optimization #%d, it may really take a while...\n', expe); tic
+    fprintf ('Running optimization #%d, it may really take a while...\n', indexBest); tic
     options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); % 'MaxFunEvals',100);
     [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,robot.motors.lb, robot.motors.ub, options);
     toc
     
-    expe = expe + 1;
+    indexBest = indexBest + 1;
 end
 %figure(1);
 %plot_initial_configuration_bound(x, lb, ub, motors);

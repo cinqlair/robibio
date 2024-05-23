@@ -6,7 +6,7 @@ function [criteria] = coreOptim(x, robot, dataGrimmer, start, step, stop, id)
     global gConfigHandler;
     global expe;
     global epoch;
-
+    epoch = 1;
 
 system (sprintf('rm -rf output/expe-%d/epoch-%d', expe, epoch));
 mkdir(sprintf('output/expe-%d/epoch-%d', expe, epoch));
@@ -31,15 +31,14 @@ save(sprintf('output/expe-%d/epoch-%d/hash.mat', expe, epoch),  'hash');
         
         %% Update and display the best solution
         best_solution = criteria;
-        fprintf ('-------------------------------------\n');
+        fprintf ('------------------------------------- iter %d\n', indexBest);
         fprintf ('New best solution!\n');
-        fprintf ('\tExpe %d\n', expe);
-        fprintf ('\tEpoch %d\n', epoch);
-        fprintf ('\n');
+        fprintf ('Expe \n' expe);
+        fprintf ('Epoch \n' epoch);
 
-        fprintf ('\tMax Weight= %.1f kg\n',weight);
+        fprintf ('\tMax Weight= %.1fkg\n',weight);
         fprintf ('\tCriteria = %f\n',criteria);
-        fprintf ('-------------------------------------\n\n\n');
+        fprintf ('-------------------------------------\n');
     end
     
     epoch = epoch + 1;

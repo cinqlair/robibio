@@ -14,7 +14,7 @@ epoch = 1;
 system (sprintf('rm -rf output/expe-%d', expe));
 mkdir(sprintf('output/expe-%d/epoch-%d', expe, epoch));
 hash = randi(1e6);
-save(sprintf('output/expe-%d/hash.mat', expe),  'hash');
+save(sprintf('output/expe-%d/epoch-%d/hash.mat', expe, epoch),  'hash');
 
 %% Global variables (to keep best optimization)
 global best_solution;
@@ -65,7 +65,6 @@ dimensions.shang = [0, -358, 0, 1];
 dimensions.foot = [121, -54, 0, 1];
 
 %% Prepare translation matrices
-global matrices;
 robot.matrices.translation = computeTranslationMatrices(dimensions);
 
 % Animation handler

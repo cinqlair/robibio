@@ -35,18 +35,18 @@ function [handle] = init_figure_robot()
     handle.motor.knee_ankle    = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [1,0.5,0,0.1], 'Marker', 'o');
 
     %% Unit vectors
-    handle.motor.unitVectors.hip        = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
-    handle.motor.unitVectors.knee       = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
-    handle.motor.unitVectors.ankle      = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
-    handle.motor.unitVectors.hip_knee   = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
-    handle.motor.unitVectors.knee_ankle = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
-    
+%     handle.motor.unitVectors.hip        = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
+%     handle.motor.unitVectors.knee       = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
+%     handle.motor.unitVectors.ankle      = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
+%     handle.motor.unitVectors.hip_knee   = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
+%     handle.motor.unitVectors.knee_ankle = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [0,0,0,0.2], 'Marker', '.');
+%     
     %% Force vectors
-    handle.motor.forceVectors.hip        = line ([0,0], [0,0], 'LineWidth', 2, 'Color', [1,0,0,0.4], 'Marker', '.');
-    handle.motor.forceVectors.knee       = line ([0,0], [0,0], 'LineWidth', 2, 'Color', [1,0,0,0.4], 'Marker', '.');
-    handle.motor.forceVectors.ankle      = line ([0,0], [0,0], 'LineWidth', 2, 'Color', [1,0,0,0.4], 'Marker', '.');
-    handle.motor.forceVectors.hip_knee   = line ([0,0], [0,0], 'LineWidth', 2, 'Color', [1,0,0,0.4], 'Marker', '.');
-    handle.motor.forceVectors.knee_ankle = line ([0,0], [0,0], 'LineWidth', 2, 'Color', [1,0,0,0.4], 'Marker', '.');
+    handle.motor.forceVectors.hip        = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [1,0,0,0.8], 'Marker', '.');
+    handle.motor.forceVectors.knee       = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0,1,0,0.8], 'Marker', '.');
+    handle.motor.forceVectors.ankle      = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0,0,1,0.8], 'Marker', '.');
+    handle.motor.forceVectors.hip_knee   = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0,1,1,0.8], 'Marker', '.');
+    handle.motor.forceVectors.knee_ankle = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [1,0.5,0,0.8], 'Marker', '.');
     
     %% Lever vectors
     handle.motor.leverVectors.hip        = line ([0,0], [0,0], 'LineWidth', 1, 'Color', [1,0,0,1], 'Marker', '.');
@@ -58,11 +58,11 @@ function [handle] = init_figure_robot()
     handle.motor.leverVectors.knee_ankle.ankle  = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [1,0.5,0,1], 'Marker', '.');
     
     %% Sliders end
-    handle.motor.slidersEnd.hip           = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
-    handle.motor.slidersEnd.knee          = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
-    handle.motor.slidersEnd.ankle         = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
-    handle.motor.slidersEnd.hip_knee      = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
-    handle.motor.slidersEnd.knee_ankle    = line ([0,0], [0,0], 'LineWidth', 3, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
+    handle.motor.slidersEnd.hip           = line ([0,0], [0,0], 'LineWidth', 5, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
+    handle.motor.slidersEnd.knee          = line ([0,0], [0,0], 'LineWidth', 5, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
+    handle.motor.slidersEnd.ankle         = line ([0,0], [0,0], 'LineWidth', 5, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
+    handle.motor.slidersEnd.hip_knee      = line ([0,0], [0,0], 'LineWidth', 5, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
+    handle.motor.slidersEnd.knee_ankle    = line ([0,0], [0,0], 'LineWidth', 5, 'Color', [0.1,0.1,0.1,0.3], 'Marker', '.');
     
     %% Stators end
     handle.motor.statorsEnd.hip           = line ([0,0], [0,0], 'LineWidth', 15, 'Color', [0.1,0.1,0.1,0.1], 'Marker', '.');

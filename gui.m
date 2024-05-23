@@ -5,7 +5,7 @@ addpath ('functions/');
 global expe;
 expe = 0;
 global epoch;
-epoch = 1;
+epoch = 372;
 global step; 
 step = 1;
 
@@ -18,7 +18,7 @@ gHandle = init_figure_robot();
 while (1)
     
     %% Check for new hash (expe restarted)
-    load(sprintf('output/expe-%d/hash.mat', expe));
+    load(sprintf('output/expe-%d/epoch-%d/hash.mat', expe, epoch));
     
     if (currentHash ~= hash) 
         % New run, reset epoch and step
