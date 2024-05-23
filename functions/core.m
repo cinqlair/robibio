@@ -27,7 +27,7 @@ for i=start:step:stop
     %% Compute motors attachment coordinates, trajectories and length
     robot.motors.joints.trajectories = computeMotorJointsTrajectories(robot);
     robot.motors.trajectories = computeMotorTrajectories(robot);
-    robot.motors.lengths = computeMotorLengths(robot);
+    
     
     
     %% Compute vectors
@@ -40,12 +40,14 @@ for i=start:step:stop
     
     robot.motors.slidersEnd = computeSlidersEnd(robot);
     robot.motors.statorsEnd = computeStatorsEnd(robot);
+    robot.motors.lengths = computeMotorLengths(robot);
     [robot.motors.maxForces, robot.motors.status] = computeMotorMaxForce(robot);
     
     
     
     
     %% Compute Jacobian
+    % Torque = Jacobian * Forces
     jacobian = computeJacobian(robot);
     
     
@@ -59,35 +61,42 @@ for i=start:step:stop
     robot.motors.velocity.hip_knee   = motor_velocities(4);
     robot.motors.velocity.knee_ankle = motor_velocities(2);
     
+
+    %% Compute Torques
+    Torques = abs(jacobian) * [ robot.motors.maxForces.ankle ; robot.motors.maxForces.knee_ankle ; robot.motors.maxForces.knee ; robot.motors.maxForces.hip_knee;  robot.motors.maxForces.hip];
     
+    robot.joints.torques.hip        = Torques(3);
+    robot.joints.torques.knee       = Torques(2);
+    robot.joints.torques.ankle      = Torques(1);
     
-    
-    %% Left leg minimize power
-    options = optimset('Display','off');
-    
-    % Minimize power
-    C = diag(motor_velocities);
-    
-    % System to solve
-    Aeq = jacobian;
-    beq = [dataGrimmer.ankle.torque(i); dataGrimmer.knee.torque(i) ; dataGrimmer.hip.torque(i)];
-    
-    % Bounds (Motors maximum force)
-    %ub = [ Inf; Inf; Inf; Inf; Inf ];
-    ub = [ robot.motors.maxForces.ankle ; robot.motors.maxForces.knee_ankle ; robot.motors.maxForces.knee ; robot.motors.maxForces.hip_knee;  robot.motors.maxForces.hip];
-    lb = -ub;
-    
-    % Solver https://fr.mathworks.com/help/optim/ug/lsqlin.html
-    [forces,resnorm,residualLeft,exitFlagLeft,output,lambda] = lsqlin(C, zeros(5,1), [], [], Aeq, beq, lb, ub, [], options);
-    
-    % Motion should be feasable
-    if (exitFlagLeft ~= 1)
-        %fprintf('Error with constrained linear least-squares problems solver\n');
-        forces=[0;0;0;0;0];
-    end
+%     
+%     %% Left leg minimize power
+%     
+%     options = optimset('Display','off');
+%     
+%     % Minimize power
+%     C = diag(motor_velocities);
+%     
+%     % System to solve
+%     Aeq = jacobian;
+%     beq = [dataGrimmer.ankle.torque(i); dataGrimmer.knee.torque(i) ; dataGrimmer.hip.torque(i)];
+%     
+%     % Bounds (Motors maximum force)
+%     %ub = [ Inf; Inf; Inf; Inf; Inf ];
+%     ub = [ robot.motors.maxForces.ankle ; robot.motors.maxForces.knee_ankle ; robot.motors.maxForces.knee ; robot.motors.maxForces.hip_knee;  robot.motors.maxForces.hip];
+%     lb = -ub;
+%     
+%     % Solver https://fr.mathworks.com/help/optim/ug/lsqlin.html
+%     [forces,resnorm,residualLeft,exitFlagLeft,output,lambda] = lsqlin(C, zeros(5,1), [], [], Aeq, beq, lb, ub, [], options);
+%     
+%     % Motion should be feasable
+%     if (exitFlagLeft ~= 1)
+%         %fprintf('Error with constrained linear least-squares problems solver\n');
+%         forces=[0;0;0;0;0];
+%     end
     
     % Store forces
-    robot.motors.forces = forces;
+    robot.motors.forces = robot.motors.maxForces;
     robot.motors.forceVectors = computeForceVectors(robot);
     
 
