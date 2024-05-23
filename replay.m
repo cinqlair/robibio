@@ -117,8 +117,8 @@ robot.motors.ub =[   85      500     80      480   50  100 ...     % Hip { Xh Yh
 
 
 %% Initial configuration (Override in the loop to start from random positions)
-x= [ -80 , 300, -80, 400, -50, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
-    40,  250,  40,  38c0, 50, 35 ...     % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
+    40,  250,  40,  380, 50, 35 ...     % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     60,  200,  -60,  35, -20, 50 ...   % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
     -50,  -50,  -50,  300, -50, 100 ...   % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     -30,  -100,  -160,  35, -30, 70 ];    % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }

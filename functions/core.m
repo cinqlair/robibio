@@ -40,8 +40,7 @@ for i=start:step:stop
     
     robot.motors.slidersEnd = computeSlidersEnd(robot);
     robot.motors.statorsEnd = computeStatorsEnd(robot);
-    robot.motors.maxForces = computeMotorMaxForce(robot);
-    
+    [robot.motors.maxForces, robot.motors.status] = computeMotorMaxForce(robot);
     
     
     
