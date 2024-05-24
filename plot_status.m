@@ -5,7 +5,7 @@ addpath ('functions/');
 
 
 global expe;
-expe = 0;
+expe = 1;
 global epoch;
 epoch = 1;
 global step; 

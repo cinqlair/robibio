@@ -3,6 +3,7 @@ global matrices;
 global gHandle;
 global expe;
 global epoch;
+global iter;
 
 
 
@@ -117,7 +118,7 @@ for i=start:step:stop
     robot.motors.powers = computeMotorPower(robot);
     
     %% Save step data
-    save(sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, index), 'robot');
+    save(sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, index), 'robot');
     
     %% Increase index for next step
     index = index+1;

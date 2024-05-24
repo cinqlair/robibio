@@ -18,8 +18,8 @@ gHandle = init_figure_robot();
 while (1)
     
     %% Check for new hash (expe restarted)
-    if (isfile(sprintf('output/expe-%d/epoch-%d/hash.mat', expe, epoch)))
-        load(sprintf('output/expe-%d/epoch-%d/hash.mat', expe, epoch));
+    if (isfile(sprintf('output/expe-%d/run-%d/epoch-%d/hash.mat', expe, epoch)))
+        load(sprintf('output/expe-%d/run-%d/epoch-%d/hash.mat', expe, epoch));
     else
         hash = currentHash;
     end

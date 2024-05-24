@@ -5,9 +5,7 @@ addpath ('functions/');
 global expe;
 expe = 1;
 global epoch;
-epoch= 1;
-global iter;
-iter = 1;
+epoch = 1;
 
 
 %% Create output folders
@@ -145,19 +143,12 @@ while (1)
     
     
     %% Optimization
-    fprintf ('Running optimization #%d, it may really take a while...\n', epoch); tic
+    fprintf ('Running optimization #%d, it may really take a while...\n', expe); tic
     options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); % 'MaxFunEvals',100);
     [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,robot.motors.lb, robot.motors.ub, options);
     toc
     
-    %% Save epoch data
-    data.x = x;
-    data.fval = fval;
-    data.exitflag = exitflag;
-    data.output = output;
-    data.robot = robot;
-    save(sprintf('output/expe-%d/epoch-%d.mat', expe, epoch), 'data');    
-    epoch = epoch + 1;
+    expe = expe + 1;
 end
 %figure(1);
 %plot_initial_configuration_bound(x, lb, ub, motors);
