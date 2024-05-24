@@ -5,9 +5,11 @@ addpath ('functions/');
 
 
 global expe;
-expe = 0;
+expe = 1;
 global epoch;
 epoch = 1;
+global iter;
+iter = 945;
 global step; 
 step = 1;
 
@@ -17,7 +19,7 @@ isOver = 0;
 
 while (isOver~=1)
     
-    filename = sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step);
+    filename = sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, step);
     if (isfile(filename))
         load(filename)
         data.maxForces.hip(step) = robot.motors.maxForces.hip;

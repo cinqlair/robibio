@@ -4,7 +4,7 @@ global gHandle;
 global expe;
 global epoch;
 global iter;
-
+global saveSteps;
 
 
 %% Motion loop
@@ -118,7 +118,9 @@ for i=start:step:stop
     robot.motors.powers = computeMotorPower(robot);
     
     %% Save step data
-    save(sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, index), 'robot');
+    if (saveSteps)
+        save(sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, index), 'robot');
+    end
     
     %% Increase index for next step
     index = index+1;

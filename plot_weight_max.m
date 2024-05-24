@@ -5,58 +5,49 @@ addpath ('functions/');
 
 
 global expe;
-expe = 0;
+expe = 1;
 global epoch;
 epoch = 1;
-global step;
-step = 1;
+global iter;
+iter = 1;
 
-isOver = 0;
+weight = [];
+max_weight = [];
 
 
-
-while (isOver~=1)
+isEpoch = true;
+while (isEpoch)
     
-    filename = sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step);
-    if (isfile(filename))
-        load(filename)
-        data.weight.hip(step) = min(robot.weight_max.hip, 300);
-        data.weight.knee(step) = min(robot.weight_max.knee, 300);
-        data.weight.ankle(step) = min(robot.weight_max.ankle, 300);
-
-        data.weight.global(step) = robot.weight_max.global;
-
-        step = step+1;
+    %dirname = sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter);
+    dirname = sprintf('output/expe-%d/epoch-%d/', expe, epoch);
+    if (exist(dirname, 'dir'))
+        
+        isIter = true;
+        while (isIter)
+            filename = sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter);
+            if (isfile(filename))
+                load(filename);
+                fprintf('Expe %d | Epoch %d | Iter %d | weight = %f kg\n', expe, epoch, iter, data.weight);
+                weight = [weight; data.weight];
+                max_weight = [max_weight; max(weight)];
+                iter = iter +1;
+            else
+                isIter = false;
+                % Next epoch
+                iter = 1;
+                epoch = epoch +1;
+            end
+        end
     else
-        isOver = 1;
+        isEpoch = false;
     end
+    
+    
     
 end
 
-figure;
-
-subplot(4,1,1); hold on;
-plot (data.weight.hip);
-
-grid on;
-title ('Hip Max Weight');
-
-subplot(4,1,2);  hold on;
-plot (data.weight.knee);
-
-grid on;
-title ('Knee Max Weight');
-
-subplot(4,1,3);  hold on;
-plot (data.weight.ankle);
-grid on;
-title ('Ankle Max Weight');
-
-subplot(4,1,4); hold on;
-plot (data.weight.global);
+figure; hold on;
+plot (weight);
+plot (max_weight);
 grid on;
 title ('Max Weight');
-
-
-disp (sprintf('Max weight : %.2f kg', min(data.weight.global)))
-

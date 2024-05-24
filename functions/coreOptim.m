@@ -1,12 +1,17 @@
 function [criteria] = coreOptim(x, robot, dataGrimmer, start, step, stop, id)
 
-global best_solution;
-global indexBest;
+
+
 global outputData;
 global gConfigHandler;
 global expe;
 global epoch;
 global iter;
+global saveSteps;
+
+global bestWeight;
+global bestEpoch; 
+global bestIter;
 
 
 system (sprintf('rm -rf output/expe-%d/epoch-%d/iter-%d', expe, epoch, iter));
@@ -27,11 +32,13 @@ criteria = -weight;
 
 
 %% Update the best solution if needed
-if (isempty(best_solution) || best_solution > criteria)
+if (isempty(bestWeight) || weight > bestWeight )
     
     
     %% Update and display the best solution
-    best_solution = criteria;
+    bestWeight = weight;
+    bestEpoch = epoch; 
+    bestIter = iter;
     fprintf ('-------------------------------------\n');
     fprintf ('New best solution!\n');
     fprintf ('\tExpe %d\n', expe);
@@ -42,6 +49,14 @@ if (isempty(best_solution) || best_solution > criteria)
     fprintf ('\tMax Weight= %.1f kg\n',weight);
     fprintf ('\tCriteria = %f\n',criteria);
     fprintf ('-------------------------------------\n\n\n');
+    
+    %% Save step data
+    if (saveSteps)
+        data.weight = weight;
+        data.epoch = epoch;
+        data.iter = iter;
+        save(sprintf('output/expe-%d/best.mat', expe), 'data');
+    end
 end
 
 
@@ -50,7 +65,12 @@ data.x = x;
 data.weight = weight;
 data.criteria = criteria;
 data.robot = robot;
-save(sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter), 'data');
+
+%% Save step data
+if (saveSteps)
+    save(sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter), 'data');
+end
+
 
 iter = iter + 1;
 

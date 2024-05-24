@@ -5,9 +5,11 @@ addpath ('functions/');
 
 
 global expe;
-expe = 0;
+expe = 1;
 global epoch;
 epoch = 1;
+global iter;
+iter = 945;
 global step;
 step = 1;
 
@@ -17,7 +19,7 @@ isOver = 0;
 
 while (isOver~=1)
     
-    filename = sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step);
+    filename = sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, step);
     if (isfile(filename))
         load(filename)
         data.torques.hip(step) = robot.joints.torques.hip;
@@ -38,23 +40,29 @@ end
 figure;
 
 subplot(3,1,1); hold on;
+yyaxis left;
 plot (data.torques.hip);
+yyaxis right;
 plot (data.expectedTorques.hip);
-legend('max', 'N.m/kg');
+legend('max available', 'required [N.m/kg]');
 grid on;
 title ('Hip Max Torque');
 
 subplot(3,1,2);  hold on;
+yyaxis left;
 plot (data.torques.knee);
+yyaxis right;
 plot (data.expectedTorques.knee);
-legend('max', 'N.m/kg');
+legend('max available', 'required [N.m/kg]');
 grid on;
 title ('Knee Max Torque');
 
 subplot(3,1,3);  hold on;
+yyaxis left;
 plot (data.torques.ankle);
+yyaxis right;
 plot (data.expectedTorques.ankle);
-legend('max', 'N.m/kg');
+legend('max available', 'required [N.m/kg]');
 grid on;
 title ('Ankle Max Torque');
 

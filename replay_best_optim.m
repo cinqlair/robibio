@@ -11,6 +11,16 @@ iter = 1;
 global step; 
 step = 1;
 
+
+
+best = load (sprintf('output/expe-%d/best.mat', expe))
+best = best.data;
+
+epoch = best.epoch;
+
+fprintf('Best solution | Epoch %d | Iter %d | Weight = %f\n', best.epoch, best.iter, best.weight);
+
+
 currentHash = 0;
 
 figure(1);

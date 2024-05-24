@@ -8,19 +8,20 @@ global epoch;
 epoch= 1;
 global iter;
 iter = 1;
-
+global saveSteps;
+saveSteps = true;
 
 %% Create output folders
+fprintf('Deleting folder output/expe-%d', expe);
 system (sprintf('rm -rf output/expe-%d', expe));
-
+fprintf(' [Done]\n');
 
 
 %% Global variables (to keep best optimization)
-global best_solution;
+global bestWeight;
+global bestEpoch; 
+global bestIter;
 
-%% Current index of the main optimization loop
-global indexBest 
-indexBest = 1;
 
 
 global gConfigHandler;
@@ -130,10 +131,18 @@ x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y
 
 
 
-
+processed = [];
 while (1)
     % Create a random initial position
 
+    load('initial-points/points.mat');
+    %% Remove processed points
+    initialPoints(processed, :) = [];
+    [best, index] = max(initialPoints(:,31));
+    processed = [processed ; 75];
+    
+    x = initialPoints(index, 1:30);
+    
     %x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;   
     
     
@@ -146,9 +155,10 @@ while (1)
     
     %% Optimization
     fprintf ('Running optimization #%d, it may really take a while...\n', epoch); tic
-    options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); % 'MaxFunEvals',100);
+    options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); %, 'MaxFunEvals',10);
     [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,robot.motors.lb, robot.motors.ub, options);
     toc
+    
     
     %% Save epoch data
     data.x = x;
@@ -156,8 +166,13 @@ while (1)
     data.exitflag = exitflag;
     data.output = output;
     data.robot = robot;
+    data.best = best_solution;
+    data.bestEpoch = bestEpoch;
+    data.bestIter = bestIter;
     save(sprintf('output/expe-%d/epoch-%d.mat', expe, epoch), 'data');    
     epoch = epoch + 1;
+    fprintf('\n\t----- New Epoch #%d ------ \n\n', epoch);
+    iter = 1;
 end
 %figure(1);
 %plot_initial_configuration_bound(x, lb, ub, motors);
