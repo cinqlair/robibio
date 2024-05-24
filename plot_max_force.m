@@ -13,10 +13,11 @@ iter = 945;
 global step; 
 step = 1;
 
+
+global saveSteps;
+saveSteps = false;
+
 isOver = 0;
-
-
-
 while (isOver~=1)
     
     filename = sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, step);

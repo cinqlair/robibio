@@ -166,7 +166,7 @@ while (1)
     data.exitflag = exitflag;
     data.output = output;
     data.robot = robot;
-    data.best = best_solution;
+    data.best = bestWeight;
     data.bestEpoch = bestEpoch;
     data.bestIter = bestIter;
     save(sprintf('output/expe-%d/epoch-%d.mat', expe, epoch), 'data');    

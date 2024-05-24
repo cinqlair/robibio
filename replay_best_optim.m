@@ -12,6 +12,10 @@ global step;
 step = 1;
 
 
+global saveSteps;
+saveSteps = false;
+
+
 
 best = load (sprintf('output/expe-%d/best.mat', expe))
 best = best.data;
@@ -52,7 +56,7 @@ while (isOver == false)
     
     
         update_figure_robot(gHandle, robot);
-        title(sprintf('Motion | Expe %d | Epoch %d | Iter %d |Step %d', expe, epoch, iter, robot.step));
+        title(sprintf('Motion | Expe %d | Epoch %d | Iter %d | Step %d | %.2f kg', expe, epoch, iter, robot.step, best.weight));
         drawnow();
         
         step = step + 1;

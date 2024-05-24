@@ -125,7 +125,7 @@ while (1)
     if (weight ~= 0)
         
         initialPoints = [ initialPoints ; [x weight] ];
-        fprintf('#%d - %f kg\n', size(initialPoints, 1), weight);
+        fprintf('#%d - %.2f kg (best = %.2f kg) \n', size(initialPoints, 1), weight, max(initialPoints(:,31)));
         save ('initial-points/points.mat', 'initialPoints');
     end
     
