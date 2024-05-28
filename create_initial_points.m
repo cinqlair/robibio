@@ -13,8 +13,8 @@ global saveSteps;
 saveSteps = false;
 
 %% Create output folders
-fprintf('Clean folder output/initial-points');
-system (sprintf('rm -rf output/initial-points/*'));
+fprintf('Clean expe initial-points/expe-%d.mat', expe);
+system (sprintf('rm -rf initial-points/expe-%d.mat', expe));
 fprintf(' [Done]\n');
 
 
@@ -126,7 +126,7 @@ while (1)
         
         initialPoints = [ initialPoints ; [x weight] ];
         fprintf('#%d - %.2f kg (best = %.2f kg) \n', size(initialPoints, 1), weight, max(initialPoints(:,31)));
-        save ('initial-points/points.mat', 'initialPoints');
+        save (sprintf('initial-points/expe-%d.mat', expe), 'initialPoints');
     end
     
     
