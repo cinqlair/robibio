@@ -13,8 +13,8 @@ global saveSteps;
 saveSteps = false;
 
 %% Create output folders
-fprintf('Clean folder output/initial-points');
-system (sprintf('rm -rf output/initial-points/*'));
+fprintf('Clean initial-points/expe-%d.mat', expe);
+system (sprintf('rm -rf initial-points/expe-%d.mat', expe));
 fprintf(' [Done]\n');
 
 
@@ -24,9 +24,9 @@ fprintf(' [Done]\n');
 % dataGrimmer.{hip|knee|ankle}.{angleDeg|torque|theta|angle}
 % N is the number of samples
 
-%motionNames = ["Climbing_ascend"];
+%motionNames = ["Cycling"];%motionNames = ["Climbing_ascend"];
 %motionNames = ["Climbing_descend"];
-%motionNames = ["Cycling"];
+
 %motionNames = ["Lifting_Squat"];
 %motionNames = ["Lifting_Stoop"];
 %motionNames = ["Recovery"];
@@ -36,7 +36,7 @@ fprintf(' [Done]\n');
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-motionNames = [ "Walking_11"];
+%motionNames = [ "Walking_11"];
 %motionNames = [ "Walking_16"];
 
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
@@ -87,14 +87,14 @@ robot.matrices.translation = computeTranslationMatrices(dimensions);
 
 
 %% Boundaries
-robot.motors.lb =  [ -85     -100    -80,    50, -50 , -100 ...    % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
+robot.motors.lb =  [ -80     -100    -80,    50, -50 , -100 ...    % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
     -80     -80     -80    278      -50  -100 ...        % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     -80     0      -200    30      -50  -100  ...        % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
     -80     -80     -80    278      -50  -100  ...        % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     -80    -80      -201   30        -50  -100 ];          % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
 
 
-robot.motors.ub =[   85      500     80      480   50  100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
+robot.motors.ub =[   80      500     80      480   50  100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
     80      480     80,     438        50  100 ...         % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     80      350     -41,    130        50  100 ...         % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
     80      80      80,     438        50  100 ...         % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
@@ -110,9 +110,9 @@ robot.motors.ub =[   85      500     80      480   50  100 ...     % Hip { Xh Yh
 
 
 initialPoints = [];
-while (1)
-    % Create a random initial position
-    
+count = 0;
+while (count < 100000)
+    % Create a random initial position    
     x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;
     
     %% Add motor coordinates to structure
@@ -123,8 +123,11 @@ while (1)
     
     weight =  core(robot, dataGrimmer, start, step, stop);
     if (weight ~= 0)
-        fprintf('%f kg\n', weight);
-        initialPoints = [ initialPoints ; [x;]
+        count = count +1;
+        initialPoints = [ initialPoints ; [x weight] ];
+        fprintf('#%d - %.2f kg (best = %.2f kg) \n', count, weight, max(initialPoints(:,31)));
+        save (sprintf('initial-points/expe-%d.mat', expe), 'initialPoints');
+        
     end
     
     
