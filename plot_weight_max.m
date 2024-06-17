@@ -5,7 +5,7 @@ addpath ('functions/');
 
 
 global expe;
-expe = 1;
+expe = 2;
 global epoch;
 epoch = 1;
 global iter;
