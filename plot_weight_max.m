@@ -14,6 +14,7 @@ iter = 1;
 weight = [];
 max_weight = [];
 
+fprintf("Preparing data...\n\n");
 
 isEpoch = true;
 while (isEpoch)
@@ -27,7 +28,7 @@ while (isEpoch)
             filename = sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter);
             if (isfile(filename))
                 load(filename);
-                fprintf('Expe %d | Epoch %d | Iter %d | weight = %f kg\n', expe, epoch, iter, data.weight);
+                %fprintf('Expe %d | Epoch %d | Iter %d | weight = %f kg\n', expe, epoch, iter, data.weight);
                 weight = [weight; data.weight];
                 max_weight = [max_weight; max(weight)];
                 iter = iter +1;
