@@ -6,6 +6,8 @@ global expe;
 expe = 1;
 global epoch;
 epoch = 1;
+global iter; 
+iter = 1;
 global step; 
 step = 1;
 
@@ -34,18 +36,19 @@ while (isOver == false)
 %         epoch = 1;
 %         step = 1;
 %     end
-    filename = sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step);
-    if (isfile(sprintf('output/expe-%d/epoch-%d/step-%d.mat', expe, epoch, step)))
+    filename = sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, step);
+    if (isfile(sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, step)))
         load(filename)
     
     
         update_figure_robot(gHandle, robot);
-        title(sprintf('Motion | Expe %d | Epoch %d | Step %d', expe, epoch, robot.step));
+        title(sprintf('Motion | Expe %d | Epoch %d | Iter %d | Step %d', expe, epoch, iter, robot.step));
         drawnow();
         
         step = step + 1;
         if (step > 1)
             step = 1;
+            iter = iter +1;            
             epoch = epoch +1;
         end
     else

@@ -51,3 +51,5 @@ plot (weight);
 plot (max_weight);
 grid on;
 title ('Max Weight');
+
+fprintf ("\nMax weight %.2f\n", max(max_weight));

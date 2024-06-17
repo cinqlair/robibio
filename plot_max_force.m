@@ -9,7 +9,7 @@ expe = 1;
 global epoch;
 epoch = 1;
 global iter;
-iter = 945;
+iter = 41;
 global step; 
 step = 1;
 
