@@ -14,10 +14,10 @@ global bestEpoch;
 global bestIter;
 
 
-system (sprintf('rm -rf output/expe-%d/epoch-%d/iter-%d', expe, epoch, iter));
-mkdir(sprintf('output/expe-%d/epoch-%d/iter-%d', expe, epoch, iter));
+system (sprintf('rm -rf /home/philippe/output/expe-%d/epoch-%d/iter-%d', expe, epoch, iter));
+mkdir(sprintf('/home/philippe/output/expe-%d/epoch-%d/iter-%d', expe, epoch, iter));
 hash = randi(1e6);
-save(sprintf('output/expe-%d/epoch-%d/iter-%d/hash.mat', expe, epoch, iter),  'hash');
+save(sprintf('/home/philippe/output/expe-%d/epoch-%d/iter-%d/hash.mat', expe, epoch, iter),  'hash');
 
 %% Add motor coordinates to structure
 %motors = appendX2motors(x, motors);
@@ -55,7 +55,7 @@ if (isempty(bestWeight) || weight > bestWeight )
         data.weight = weight;
         data.epoch = epoch;
         data.iter = iter;
-        save(sprintf('output/expe-%d/best.mat', expe), 'data');
+        save(sprintf('/home/philippe/output/expe-%d/best.mat', expe), 'data');
     end
 end
 
@@ -68,7 +68,7 @@ data.robot = robot;
 
 %% Save step data
 if (saveSteps)
-    save(sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter), 'data');
+    save(sprintf('/home/philippe/output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter), 'data');
 end
 
 

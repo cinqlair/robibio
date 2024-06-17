@@ -3,7 +3,7 @@ close all;clear all;clc;
 addpath ('functions/');
 
 global expe;
-expe = 1;
+expe = 14;
 global epoch;
 epoch= 1;
 global iter;
@@ -40,7 +40,7 @@ global gConfigHandler;
 % dataGrimmer.{hip|knee|ankle}.{angleDeg|torque|theta|angle}
 % N is the number of samples
 
-motionNames = ["Cycling"];
+%motionNames = ["Cycling"];
 %motionNames = ["Sit_to_Stand"];
 %motionNames = ["Climbing_descend"];
 %motionNames = ["Stairs_ascend"];
@@ -53,7 +53,7 @@ motionNames = ["Cycling"];
 %motionNames = ["Climbing_ascend"];
 %motionNames = ["Recovery"];
 %motionNames = ["Running_26"];
-%motionNames = ["Running_40"];
+motionNames = ["Running_40"];
 
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
 

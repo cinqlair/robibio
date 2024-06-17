@@ -119,7 +119,7 @@ for i=start:step:stop
     
     %% Save step data
     if (saveSteps)
-        save(sprintf('output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, index), 'robot');
+        save(sprintf('/home/philippe/output/expe-%d/epoch-%d/iter-%d/step-%d.mat', expe, epoch, iter, index), 'robot');
     end
     
     %% Increase index for next step
