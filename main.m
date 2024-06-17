@@ -30,7 +30,7 @@ global gConfigHandler;
 
 
 
-id = 1000;
+%id = 1;
 
 
 
@@ -40,9 +40,9 @@ id = 1000;
 % dataGrimmer.{hip|knee|ankle}.{angleDeg|torque|theta|angle}
 % N is the number of samples
 
+motionNames = ["Cycling"];
 %motionNames = ["Climbing_ascend"];
 %motionNames = ["Climbing_descend"];
-%motionNames = ["Cycling"];
 %motionNames = ["Lifting_Squat"];
 %motionNames = ["Lifting_Stoop"];
 %motionNames = ["Recovery"];
@@ -52,7 +52,7 @@ id = 1000;
 %motionNames = ["Squat_Jump"];
 %motionNames = ["Stairs_ascend"];
 %motionNames = ["Stairs_descend"];
-motionNames = [ "Walking_11"];
+%motionNames = [ "Walking_11"];
 %motionNames = [ "Walking_16"];
 
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
@@ -135,7 +135,7 @@ processed = [];
 while (1)
     % Create a random initial position
 
-    load('initial-points/points.mat');
+    load(sprintf('initial-points/expe-%d.mat', expe));
     %% Remove processed points
     initialPoints(processed, :) = [];
     [best, index] = max(initialPoints(:,31));
