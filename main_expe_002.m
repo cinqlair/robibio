@@ -14,9 +14,9 @@ global saveSteps;
 saveSteps = true;
 
 %% Create output folders
-fprintf('Deleting folder %s/expe-%d', path, expe);
-system (sprintf('rm -rf %s/expe-%d', path, expe));
-fprintf(' [Done]\n');
+% fprintf('Deleting folder %s/expe-%d', path, expe);
+% system (sprintf('rm -rf %s/expe-%d', path, expe));
+% fprintf(' [Done]\n');
 
 
 %% Global variables (to keep best optimization)
