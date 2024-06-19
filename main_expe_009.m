@@ -1,6 +1,8 @@
 close all;clear all;clc;
 %% Path for Matlab functions
 addpath ('functions/');
+global path;
+path = '/home/philippe/output';
 
 global expe;
 expe = 9;
@@ -12,8 +14,8 @@ global saveSteps;
 saveSteps = true;
 
 %% Create output folders
-fprintf('Deleting folder output/expe-%d', expe);
-system (sprintf('rm -rf output/expe-%d', expe));
+fprintf('Deleting folder %s/expe-%d', path, expe);
+system (sprintf('rm -rf %s/expe-%d', path, expe));
 fprintf(' [Done]\n');
 
 
@@ -129,19 +131,23 @@ x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y
     -50,  -50,  -50,  400, -50, 100 ...   % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     -30,  -100,  -160,  35, -30, 70 ];    % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
 
+% Load initial points
+load(sprintf('initial-points/expe-%d.mat', expe));
 
-
-processed = [];
 while (1)
     % Create a random initial position
-
-    load(sprintf('initial-points/expe-%d.mat', expe));
-    %% Remove processed points
-    initialPoints(processed, :) = [];
-    [best, index] = max(initialPoints(:,31));
-    processed = [processed ; 75];
     
+    
+    %% Remove processed points
+    
+    [best, index] = max(initialPoints(:,31));
+    
+        
     x = initialPoints(index, 1:30);
+    
+    %fprintf('Remove index %d\n', index);
+    initialPoints(index, :) = [];
+    
     
     %x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;   
     
@@ -156,6 +162,7 @@ while (1)
     %% Optimization
     fprintf ('Running optimization #%d, it may really take a while...\n', epoch); tic
     options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); %, 'MaxFunEvals',10);
+    %options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1, 'MaxFunEvals',10);
     [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,robot.motors.lb, robot.motors.ub, options);
     toc
     
@@ -169,7 +176,7 @@ while (1)
     data.best = bestWeight;
     data.bestEpoch = bestEpoch;
     data.bestIter = bestIter;
-    save(sprintf('/home/philippe/output/expe-%d/epoch-%d.mat', expe, epoch), 'data');    
+    save(sprintf('%s/expe-%d/epoch-%d.mat', path, expe, epoch), 'data');    
     epoch = epoch + 1;
     fprintf('\n\t----- New Epoch #%d ------ \n\n', epoch);
     iter = 1;

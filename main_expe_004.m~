@@ -44,8 +44,8 @@ global gConfigHandler;
 
 %motionNames = ["Cycling"];
 %motionNames = ["Sit_to_Stand"];
-%motionNames = ["Climbing_descend"];
-motionNames = ["Stairs_ascend"];
+motionNames = ["Climbing_descend"];
+%motionNames = ["Stairs_ascend"];
 %motionNames = [ "Walking_11"];
 %motionNames = ["Stairs_descend"];
 %motionNames = [ "Walking_16"];

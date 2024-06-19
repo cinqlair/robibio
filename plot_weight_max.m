@@ -2,10 +2,12 @@ close all;clear all;clc;
 %% Path for Matlab functions
 addpath ('functions/');
 
+global path;
+path = '/home/philippe/robibio/grimmer_version/output';
 
 
 global expe;
-expe = 2;
+expe = 1;
 global epoch;
 epoch = 1;
 global iter;
@@ -20,12 +22,12 @@ isEpoch = true;
 while (isEpoch)
     
     %dirname = sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter);
-    dirname = sprintf('output/expe-%d/epoch-%d/', expe, epoch);
+    dirname = sprintf('%s/expe-%d/epoch-%d/',path ,expe ,epoch);
     if (exist(dirname, 'dir'))
         
         isIter = true;
         while (isIter)
-            filename = sprintf('output/expe-%d/epoch-%d/iter-%d.mat', expe, epoch, iter);
+            filename = sprintf('%s/expe-%d/epoch-%d/iter-%d.mat', path, expe, epoch, iter);
             if (isfile(filename))
                 load(filename);
                 %fprintf('Expe %d | Epoch %d | Iter %d | weight = %f kg\n', expe, epoch, iter, data.weight);

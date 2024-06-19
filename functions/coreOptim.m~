@@ -18,7 +18,7 @@ global bestIter;
 system (sprintf('rm -rf %s/expe-%d/epoch-%d/iter-%d', path, expe, epoch, iter));
 mkdir(sprintf('%s/expe-%d/epoch-%d/iter-%d',path ,expe ,epoch ,iter));
 hash = randi(1e6);
-save(sprintf('%s/expe-%d/epoch-%d/iter-%d/hash.mat', path, expe, epoch, iter),  'hash');
+save(sprintf('%s/expe-%d/epoch-%d/iter-%d/hash.mat', paexpe, epoch, iter),  'hash');
 
 %% Add motor coordinates to structure
 %motors = appendX2motors(x, motors);
