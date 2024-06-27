@@ -5,7 +5,7 @@ global path;
 path = 'output';
 
 global expe;
-expe = 1;
+expe = 29;
 global epoch;
 epoch= 1;
 global iter;
@@ -42,7 +42,7 @@ global gConfigHandler;
 % dataGrimmer.{hip|knee|ankle}.{angleDeg|torque|theta|angle}
 % N is the number of samples
 
-motionNames = ["Cycling"];
+%motionNames = ["Cycling"];
 %motionNames = ["Sit_to_Stand"];
 %motionNames = ["Climbing_descend"];
 %motionNames = ["Stairs_ascend"];
@@ -50,7 +50,7 @@ motionNames = ["Cycling"];
 %motionNames = ["Stairs_descend"];
 %motionNames = [ "Walking_16"];
 %motionNames = ["Lifting_Squat"];
-%motionNames = ["Squat_Jump"];
+motionNames = ["Squat_Jump"];
 %motionNames = ["Lifting_Stoop"];
 %motionNames = ["Climbing_ascend"];
 %motionNames = ["Recovery"];
@@ -84,8 +84,8 @@ dimensions.foot = [121, -54, 0, 1];
 robot.motors.enable.hip = true;
 robot.motors.enable.knee = true;
 robot.motors.enable.ankle = true;
-robot.motors.enable.hip_knee = true;
-robot.motors.enable.knee_ankle = true;
+robot.motors.enable.hip_knee = false;
+robot.motors.enable.knee_ankle = false;
 
 % Sliders length [mm]
 robot.motors.sliderLength.hip = 290;
