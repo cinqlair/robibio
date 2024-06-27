@@ -1,39 +1,21 @@
 close all;clear all;clc;
 %% Path for Matlab functions
 addpath ('functions/');
-global path;
-path = '/home/philippe/output';
 
 global expe;
-expe = 2;
+expe = 27;
 global epoch;
 epoch= 1;
 global iter;
 iter = 1;
+
 global saveSteps;
-saveSteps = true;
+saveSteps = false;
 
 %% Create output folders
-fprintf('Deleting folder %s/expe-%d', path, expe);
-system (sprintf('rm -rf %s/expe-%d', path, expe));
+fprintf('Clean initial-points/expe-%d.mat', expe);
+system (sprintf('rm -rf initial-points/expe-%d.mat', expe));
 fprintf(' [Done]\n');
-
-
-%% Global variables (to keep best optimization)
-global bestWeight;
-global bestEpoch; 
-global bestIter;
-
-
-
-global gConfigHandler;
-
-
-
-
-
-%id = 1;
-
 
 
 
@@ -42,33 +24,27 @@ global gConfigHandler;
 % dataGrimmer.{hip|knee|ankle}.{angleDeg|torque|theta|angle}
 % N is the number of samples
 
-motionNames = ["Cycling"];
-%motionNames = ["Sit_to_Stand"];
-%motionNames = ["Climbing_descend"];
-%motionNames = ["Stairs_ascend"];
-%motionNames = [ "Walking_11"];
-%motionNames = ["Stairs_descend"];
-%motionNames = [ "Walking_16"];
-%motionNames = ["Lifting_Squat"];
-%motionNames = ["Squat_Jump"];
-%motionNames = ["Lifting_Stoop"];
+%motionNames = ["Cycling"];
 %motionNames = ["Climbing_ascend"];
+%motionNames = ["Climbing_descend"];
+%motionNames = ["Lifting_Squat"];
+%motionNames = ["Lifting_Stoop"];
 %motionNames = ["Recovery"];
-%motionNames = ["Running_26"];
+motionNames = ["Running_26"];
 %motionNames = ["Running_40"];
+%motionNames = ["Sit_to_Stand"];
+%motionNames = ["Squat_Jump"];
+%motionNames = ["Stairs_ascend"];
+%motionNames = ["Stairs_descend"];
+%motionNames = [ "Walking_11"];
+%motionNames = [ "Walking_16"];
 
 [dataGrimmer, N] = loadGrimmerData('./', motionNames);
-
-% plot (dataGrimmer.hip.theta);
-% hold on;
-% plot (dataGrimmer.hip.angleDeg);
 
 
 start = 1;
 step = 1;
 stop = 1000;
-
-
 
 
 
@@ -84,8 +60,8 @@ dimensions.foot = [121, -54, 0, 1];
 robot.motors.enable.hip = true;
 robot.motors.enable.knee = true;
 robot.motors.enable.ankle = true;
-robot.motors.enable.hip_knee = true;
-robot.motors.enable.knee_ankle = true;
+robot.motors.enable.hip_knee = false;
+robot.motors.enable.knee_ankle = false;
 
 % Sliders length [mm]
 robot.motors.sliderLength.hip = 290;
@@ -124,62 +100,37 @@ robot.motors.ub =[   80      500     80      480   50  100 ...     % Hip { Xh Yh
     80      80      80,     438        50  100 ...         % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
     80      80      -39,    134        50  100];           % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
 
-%% Initial configuration (Override in the loop to start from random positions)
-x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
-    40,  250,  40,  380, 50, 0 ...     % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
-    60,  200,  -60,  35, -20, 50 ...   % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
-    -50,  -50,  -50,  400, -50, 100 ...   % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
-    -30,  -100,  -160,  35, -30, 70 ];    % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
+% %% Initial configuration (Override in the loop to start from random positions)
+% x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y }
+%     40,  250,  40,  380, 50, 0 ...     % Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+%     60,  200,  -60,  35, -20, 50 ...   % Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
+%     -50,  -50,  -50,  400, -50, 100 ...   % Hip-Knee { Xh Yh Xl Yl Offset-X Offset-Y }
+%     -30,  -100,  -160,  35, -30, 70 ];    % Knee-Ankle { Xh Yh Xl Yl Offset-X Offset-Y }
+%
 
-% Load initial points
-load(sprintf('initial-points/expe-%d.mat', expe));
 
-while (1)
-    % Create a random initial position
+initialPoints = [];
+count = 0;
+while (count < 100000)
+    % Create a random initial position    
+    x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;
     
-    
-    %% Remove processed points
-    
-    [best, index] = max(initialPoints(:,31));
-    
-        
-    x = initialPoints(index, 1:30);
-    
-    %fprintf('Remove index %d\n', index);
-    initialPoints(index, :) = [];
-    
-    
-    %x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;   
-    
-    
-%     figure(2)
-%     gHandle = init_figure_robot();
+    %% Add motor coordinates to structure
+    robot.motors.parameters = appendX2motors(x);
     
     %% Anonymous function for calling the core from fminsearchbnd
-    paramCore = @(x)coreOptim(x,robot, dataGrimmer, start, step, stop, expe);
+    %paramCore = @(x)coreOptim(x,robot, dataGrimmer, start, step, stop, id);
+    
+    weight =  core(robot, dataGrimmer, start, step, stop);
+    if (weight ~= 0)
+        count = count +1;
+        initialPoints = [ initialPoints ; [x weight] ];
+        fprintf('#%d - %.2f kg (best = %.2f kg) \n', count, weight, max(initialPoints(:,31)));
+        save (sprintf('initial-points/expe-%d.mat', expe), 'initialPoints');
+        
+    end
     
     
-    %% Optimization
-    fprintf ('Running optimization #%d, it may really take a while...\n', epoch); tic
-    options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1); %, 'MaxFunEvals',10);
-    %options = optimset('Display','off', 'TolFun', 1e-2, 'TolX', 0.1, 'MaxFunEvals',10);
-    [x,fval,exitflag,output] = fminsearchbnd(paramCore,x,robot.motors.lb, robot.motors.ub, options);
-    toc
-    
-    
-    %% Save epoch data
-    data.x = x;
-    data.fval = fval;
-    data.exitflag = exitflag;
-    data.output = output;
-    data.robot = robot;
-    data.best = bestWeight;
-    data.bestEpoch = bestEpoch;
-    data.bestIter = bestIter;
-    save(sprintf('%s/expe-%d/epoch-%d.mat', path, expe, epoch), 'data');    
-    epoch = epoch + 1;
-    fprintf('\n\t----- New Epoch #%d ------ \n\n', epoch);
-    iter = 1;
 end
 %figure(1);
 %plot_initial_configuration_bound(x, lb, ub, motors);

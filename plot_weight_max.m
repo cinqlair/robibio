@@ -3,11 +3,12 @@ close all;clear all;clc;
 addpath ('functions/');
 
 global path;
-path = '/home/philippe/robibio/grimmer_version/output';
+%path = '/home/philippe/robibio/grimmer_version/output';
+path = '/media/philippe/Disk_12To/robibio';
 
 
 global expe;
-expe = 1;
+expe = 13;
 global epoch;
 epoch = 1;
 global iter;
