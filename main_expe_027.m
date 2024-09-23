@@ -11,7 +11,7 @@ epoch= 1;
 global iter;
 iter = 1;
 global saveSteps;
-saveSteps = true;
+saveSteps = false;
 
 %% Create output folders
 % fprintf('Deleting folder %s/expe-%d', path, expe);
@@ -134,7 +134,7 @@ x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y
 % Load initial points
 load(sprintf('initial-points/expe-%d.mat', expe));
 
-while (1)
+for i=1:100
     % Create a random initial position
     
     
@@ -143,7 +143,9 @@ while (1)
     [best, index] = max(initialPoints(:,31));
     
         
-    x = initialPoints(index, 1:30);
+    data.initial_x = initialPoints(index, 1:30);
+    x = data.initial_x;
+   
     
     %fprintf('Remove index %d\n', index);
     initialPoints(index, :) = [];

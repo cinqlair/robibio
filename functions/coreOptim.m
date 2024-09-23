@@ -8,17 +8,20 @@ global path;
 global expe;
 global epoch;
 global iter;
+
 global saveSteps;
+global saveIters;
 
 global bestWeight;
 global bestEpoch; 
 global bestIter;
 
-
-system (sprintf('rm -rf %s/expe-%d/epoch-%d/iter-%d', path, expe, epoch, iter));
-mkdir(sprintf('%s/expe-%d/epoch-%d/iter-%d',path ,expe ,epoch ,iter));
-hash = randi(1e6);
-save(sprintf('%s/expe-%d/epoch-%d/iter-%d/hash.mat', path, expe, epoch, iter),  'hash');
+if (saveSteps)
+    system (sprintf('rm -rf %s/expe-%d/epoch-%d/iter-%d', path, expe, epoch, iter));
+    mkdir(sprintf('%s/expe-%d/epoch-%d/iter-%d',path ,expe ,epoch ,iter));
+    hash = randi(1e6);
+    save(sprintf('%s/expe-%d/epoch-%d/iter-%d/hash.mat', path, expe, epoch, iter),  'hash');
+end
 
 %% Add motor coordinates to structure
 %motors = appendX2motors(x, motors);
@@ -68,7 +71,7 @@ data.criteria = criteria;
 data.robot = robot;
 
 %% Save step data
-if (saveSteps)
+if (saveIters)
     save(sprintf('%s/expe-%d/epoch-%d/iter-%d.mat',path , expe, epoch, iter), 'data');
 end
 
