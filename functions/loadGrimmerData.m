@@ -20,8 +20,8 @@ data.ankle.torque   = [];
 data.ankle.dqdt     = [];
 data.ankle.power    = [];
 
-
-for i=1:size(motionNames, 1)
+for i=1:size(motionNames, 2)
+    
     motion = eval('grimmer.'+motionNames(i));
     
     data.hip.angleDeg   = [ data.hip.angleDeg ; motion.Hip_Angle ];

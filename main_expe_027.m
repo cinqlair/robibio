@@ -2,7 +2,7 @@ close all;clear all;clc;
 %% Path for Matlab functions
 addpath ('functions/');
 global path;
-path = 'output';
+path = '/media/philippe/Disk_12To/robibio';
 
 global expe;
 expe = 27;
@@ -10,14 +10,18 @@ global epoch;
 epoch= 1;
 global iter;
 iter = 1;
+
 global saveSteps;
+global saveIters;
+saveIters = false;
 saveSteps = false;
 
 %% Create output folders
-% fprintf('Deleting folder %s/expe-%d', path, expe);
-% system (sprintf('rm -rf %s/expe-%d', path, expe));
-% fprintf(' [Done]\n');
+fprintf('Deleting folder %s/expe-%d', path, expe);
+system (sprintf('rm -rf %s/expe-%d', path, expe));
+fprintf(' [Done]\n');
 
+mkdir(sprintf('%s/expe-%d',path ,expe ));
 
 %% Global variables (to keep best optimization)
 global bestWeight;
@@ -134,7 +138,7 @@ x= [ -80 , 300, -80, 400, -20, 100 ...     % Hip { Xh Yh Xl Yl Offset-X Offset-Y
 % Load initial points
 load(sprintf('initial-points/expe-%d.mat', expe));
 
-for i=1:100
+for i=1:200
     % Create a random initial position
     
     
@@ -143,8 +147,8 @@ for i=1:100
     [best, index] = max(initialPoints(:,31));
     
         
-    data.initial_x = initialPoints(index, 1:30);
-    x = data.initial_x;
+    data.x_initial = initialPoints(index, 1:30);
+    x = data.x_initial;
    
     
     %fprintf('Remove index %d\n', index);
@@ -170,7 +174,7 @@ for i=1:100
     
     
     %% Save epoch data
-    data.x = x;
+    data.x_final = x;
     data.fval = fval;
     data.exitflag = exitflag;
     data.output = output;
