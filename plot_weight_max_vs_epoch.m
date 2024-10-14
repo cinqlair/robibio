@@ -8,7 +8,7 @@ path = '/media/philippe/Disk_12To/robibio';
 
 
 global expe;
-expe = 34;
+expe = 41;
 global epoch;
 epoch = 1;
 %global iter;
