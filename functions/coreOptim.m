@@ -12,6 +12,7 @@ global iter;
 global saveSteps;
 global saveIters;
 
+
 global bestWeight;
 global bestEpoch; 
 global bestIter;
