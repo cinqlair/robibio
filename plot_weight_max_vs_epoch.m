@@ -4,15 +4,15 @@ addpath ('functions/');
 
 global path;
 %path = '/home/philippe/robibio/grimmer_version/output';
-path = '/media/philippe/Disk_12To/robibio';
+path = 'output/single';
 
 
-global expe;
-expe = 34;
+global archId;
+archId = 1;
+global motionId;
+motionId = 3;
 global epoch;
 epoch = 1;
-%global iter;
-%iter = 1;
 
 weight = [];
 max_weight = [];
@@ -22,7 +22,7 @@ fprintf("Preparing data...\n\n");
 isFile = true;
 while (isFile)
     
-    filename = sprintf('%s/expe-%d/epoch-%d.mat',path ,expe ,epoch);
+    filename = sprintf('%s/arch-%d-motion-%d/epoch-%d.mat',path, archId, motionId, epoch);
     if (isfile(filename))
         
         load(filename);

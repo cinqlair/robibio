@@ -2,7 +2,7 @@ close all;clear all;clc;
 %% Path for Matlab functions
 addpath ('functions/');
 global path;
-path = '/media/philippe/Disk_12To/robibio';
+path = 'output/';
 
 global expe;
 expe = 1;

@@ -1,11 +1,13 @@
-function [criteria] = coreOptim(x, robot, dataGrimmer, start, step, stop, id)
+function [criteria] = coreOptim(x, robot, dataGrimmer, start, step, stop)
 
 
 
 global outputData;
 global gConfigHandler;
 global path; 
-global expe;
+
+global archId;
+global motionId;
 global epoch;
 global iter;
 
@@ -18,10 +20,10 @@ global bestEpoch;
 global bestIter;
 
 if (saveSteps)
-    system (sprintf('rm -rf %s/expe-%d/epoch-%d/iter-%d', path, expe, epoch, iter));
-    mkdir(sprintf('%s/expe-%d/epoch-%d/iter-%d',path ,expe ,epoch ,iter));
+    system (sprintf('rm -rf %s/arch-%d-motion-%d/epoch-%d/iter-%d', path, archId, motionId, epoch, iter));
+    mkdir(sprintf('%s/arch-%d-motion-%d/epoch-%d/iter-%d',path ,archId, motionId, iter));
     hash = randi(1e6);
-    save(sprintf('%s/expe-%d/epoch-%d/iter-%d/hash.mat', path, expe, epoch, iter),  'hash');
+    save(sprintf('%s/arch-%d-motion-%d/epoch-%d/iter-%d/hash.mat', path, archId, motionId, iter),  'hash');
 end
 
 %% Add motor coordinates to structure
@@ -46,7 +48,8 @@ if (isempty(bestWeight) || weight > bestWeight )
     bestIter = iter;
     fprintf ('-------------------------------------\n');
     fprintf ('New best solution!\n');
-    fprintf ('\tExpe %d\n', expe);
+    fprintf ('\tArchitecture %d\n', archId);
+    fprintf ('\tMotion %d\n', motionId);
     fprintf ('\tEpoch %d\n', epoch);
     fprintf ('\tIteration %d\n', iter);
     fprintf ('\n');
@@ -60,7 +63,7 @@ if (isempty(bestWeight) || weight > bestWeight )
         data.weight = weight;
         data.epoch = epoch;
         data.iter = iter;
-        save(sprintf('%s/expe-%d/best.mat', path, expe), 'data');
+        save(sprintf('%s/archId-%d-motionId-%d/best.mat', path, archId, motionId), 'data');
     end
 end
 
@@ -73,7 +76,7 @@ data.robot = robot;
 
 %% Save step data
 if (saveIters)
-    save(sprintf('%s/expe-%d/epoch-%d/iter-%d.mat',path , expe, epoch, iter), 'data');
+    save(sprintf('%s/arch-%d-motion-%d/epoch-%d/iter-%d.mat',path , archId, motionId, epoch, iter), 'data');
 end
 
 

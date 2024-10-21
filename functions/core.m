@@ -2,9 +2,12 @@ function [weight] = core(robot, dataGrimmer, start, step, stop)
 global matrices;
 global gHandle;
 global path;
-global expe;
+
+global archId;
+global motionId;
 global epoch;
 global iter;
+
 global saveSteps;
 
 
@@ -120,7 +123,7 @@ for i=start:step:stop
     
     %% Save step data
     if (saveSteps)
-        save(sprintf('%s/expe-%d/epoch-%d/iter-%d/step-%d.mat', path, expe, epoch, iter, index), 'robot');
+        save(sprintf('%s/archId-%d-motion-%d/epoch-%d/iter-%d/step-%d.mat', path, archId, motionId, epoch, iter, index), 'robot');
     end
     
     %% Increase index for next step
