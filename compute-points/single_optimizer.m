@@ -23,8 +23,8 @@ global bestEpoch;
 global bestIter;
 
 
-for archId = 1:1
-    for motionId = 1:1
+for archId = 7:14
+    for motionId = 1:14
         
         %% Create output folders
         fprintf('Deleting folder %s/arch-%d-motion-%d',path,  archId, motionId);

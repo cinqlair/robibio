@@ -12,7 +12,7 @@ path = 'output/single';
 global archId;
 archId = 1;
 global motionId;
-motionId = 5;
+motionId = 3;
 global epoch;
 epoch = 1;
 
