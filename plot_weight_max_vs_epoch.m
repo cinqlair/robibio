@@ -6,15 +6,17 @@ addpath ('functions/');
 
 global path;
 %path = '/home/philippe/robibio/grimmer_version/output';
-path = 'output/single';
+path = 'output/single_fast';
 
 
 global archId;
-archId = 1;
+archId = 7;
 global motionId;
-motionId = 5;
+motionId = 10;
 global epoch;
 epoch = 1;
+
+
 
 weight = [];
 max_weight = [];

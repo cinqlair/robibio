@@ -2,7 +2,7 @@ close all;clear all;clc;
 %% Path for Matlab functions
 addpath ('../functions/');
 global path;
-path = '../output/single';
+path = '../output/single_fast';
 
 
 global saveSteps;
@@ -23,7 +23,7 @@ global bestEpoch;
 global bestIter;
 
 
-for archId = 7:14
+for archId = 3:3
     for motionId = 1:14
         
         %% Create output folders
@@ -199,7 +199,7 @@ for archId = 7:14
         load(sprintf('../initial-points/single-arch-%d-motion-%d.mat', archId, motionId))
         
         
-        for i=1:200
+        for i=1:10
             % Create a random initial position
             
             
