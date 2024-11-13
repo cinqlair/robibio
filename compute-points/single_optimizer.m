@@ -23,8 +23,8 @@ global bestEpoch;
 global bestIter;
 
 
-for archId = 3:3
-    for motionId = 1:14
+for archId = 14:14
+    for motionId = 4:4
         
         %% Create output folders
         fprintf('Deleting folder %s/arch-%d-motion-%d',path,  archId, motionId);
@@ -199,7 +199,7 @@ for archId = 3:3
         load(sprintf('../initial-points/single-arch-%d-motion-%d.mat', archId, motionId))
         
         
-        for i=1:10
+        for i=1:200
             % Create a random initial position
             
             

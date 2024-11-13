@@ -10,9 +10,9 @@ path = 'output/single_fast';
 
 
 global archId;
-archId = 7;
+archId = 14;
 global motionId;
-motionId = 10;
+motionId = 4;
 global epoch;
 epoch = 1;
 
