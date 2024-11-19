@@ -24,11 +24,13 @@ for archId = 1:14
         
         
         %% Create output folders
-        fprintf('Clean initial-points/single-arch-%d-motion-%d.mat', archId, motionId);
-        system (sprintf('rm -rf ../initial-points/single-arch-%d-motion-%d.mat', archId, motionId));
-        fprintf(' [Done]\n');
+        %fprintf('Clean initial-points/single-arch-%d-motion-%d.mat', archId, motionId);
+        %system (sprintf('rm -rf ../initial-points/single-arch-%d-motion-%d.mat', archId, motionId));
+        %fprintf(' [Done]\n');
         
         
+        load (sprintf('../initial-points/single-arch-%d-motion-%d.mat', archId, motionId));
+        fds
         
         
         %% Load dataset
