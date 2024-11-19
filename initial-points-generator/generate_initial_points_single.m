@@ -180,7 +180,7 @@ for archId = 1:14
         
         fprintf ("Start creating initial points\n");
         %initialPoints = [];
-        while (size(initialPoints, 1) < 1100)
+        while (size(initialPoints, 1) < 10000)
             % Create a random initial position
             x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;
             
