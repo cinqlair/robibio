@@ -31,7 +31,7 @@ for archId = 1:14
         
         data = load (sprintf('../initial-points/single-arch-%d-motion-%d.mat', archId, motionId));
         initialPoints = data.initialPoints;
-        clear data;
+        
         
         %% Load dataset
         % dataGrimmer contains the data (1000 sample per motion)
@@ -180,7 +180,8 @@ for archId = 1:14
         
         fprintf ("Start creating initial points\n");
         %initialPoints = [];
-        while (size(initialPoints, 1) < 1100)
+        count = 0;
+        while (size(initialPoints, 1) < 1000)
             % Create a random initial position
             x=(robot.motors.ub-robot.motors.lb).*rand(1,30)+robot.motors.lb;
             
@@ -192,8 +193,9 @@ for archId = 1:14
             
             weight =  core(robot, dataGrimmer, start, step, stop);
             if (weight ~= 0)
+                count = count +1;
                 initialPoints = [ initialPoints ; [x weight] ];
-                fprintf('Arch %d | Motion %d | #%d - %.2f kg (best = %.2f kg) \n', archId, motionId, size(initialPoints, 1), weight, max(initialPoints(:,31)));
+                fprintf('Arch %d | Motion %d | #%d - %.2f kg (best = %.2f kg) \n', archId, motionId, count, weight, max(initialPoints(:,31)));
                 save (sprintf('../initial-points/single-arch-%d-motion-%d.mat', archId, motionId));
                 
             end
