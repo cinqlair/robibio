@@ -15,7 +15,7 @@ global motionId;
 global epoch;
 global iter;
 
-for archId = 1:14
+for archId = 4:6
     for motionId = 1:14
         
         
